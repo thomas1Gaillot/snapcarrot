@@ -22,10 +22,11 @@ export default function RootLayout({
     return (<>
             <html>
             <body
-                className={`${inter.className}`}>
+                className={`${inter.className} bg-secondary/20 flex flex-col py-8 items-center  w-screen overflow-x-hidden h-screen`}>
             <MainLayout>
                 {children}
             </MainLayout>
+
             <Toaster/>
             </body>
 
