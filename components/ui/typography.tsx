@@ -10,7 +10,7 @@ function TypographyBlockquote({children}: { children: JSX.Element | string }) {
 
 function TypographyH1({children}: { children: JSX.Element | string }) {
     return (
-        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-black lg:text-4xl">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-black lg:text-5xl">
             {children}
         </h1>
     )
