@@ -8,12 +8,10 @@ const variants = {
 };
 
 const PageTransition: FC<{ children: ReactNode }> = ({ children }) => {
-    console.log('PageTransition')
     return (
         <motion.div
             initial="hidden"
             animate="enter"
-            exit="exit"
             variants={variants}
             transition={{ duration: 0.5 }}
             className="h-full"
