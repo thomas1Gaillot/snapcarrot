@@ -10,21 +10,23 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import useUserStore from "@/domain/useUserStore";
 import {useRouter} from "next/navigation";
 import Logo from "@/components/[locale]/Logo";
+import {UndoIcon} from "lucide-react";
+import useContestStore from "@/domain/useContestStore";
 
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: "Le nom de jeu doit contenir au moins 2 caractères.",
+    title: z.string().min(2, {
+        message: "Le titre doit contenir au moins 2 caractères.",
     }),
 })
 
-export default function StartwithUsernamePage() {
-    const {user, setUser}= useUserStore()
+export default function AddContestTitle() {
     const router = useRouter()
+    const {title, setTitle} = useContestStore()
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            title: title,
         },
     })
 
@@ -32,25 +34,27 @@ export default function StartwithUsernamePage() {
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        setUser({...user, name : values.username})
-        router.push('/on-boarding/create-join-contest')
+        setTitle(values.title)
+        router.push('/on-boarding/add-contest-description')
     }
 
     return (<>
-            <Logo/>
-            <TypographyH1>Bienvenue sur SnapCarrot</TypographyH1>
+            <Button className={'w-max'} onClick={() => router.push('/on-boarding/create-join-contest')} variant={'secondary'}>
+                <UndoIcon className={"text-gray-800 size-4"} />
+            </Button>
+            <TypographyH1>{'Le titre de mon concours'}</TypographyH1>
             <p className={"leading-7 text-gray-800"}>
-                {"Pour commencer, choisissez un nom d'utilisateur."}
+                {"Commençons votre concours avec un petit titre."}
             </p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
                         control={form.control}
-                        name="username"
+                        name="title"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input placeholder="Choisissez un nom d'utilisateur unique" {...field} />
+                                    <Input placeholder="Meilleures photos de l'année" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -59,8 +63,7 @@ export default function StartwithUsernamePage() {
                 </form>
             </Form>
             <div className={"grid gap-2 text-center py-4"}>
-                <Button type={"submit"} onClick={form.handleSubmit(onSubmit)} size={'lg'} variant={'default'}>Commencer</Button>
-                <TypographySmall>Cette application est gratuite. Les photos que vous importez seront supprimés après chaque concours.</TypographySmall>
+                <Button type={"submit"} onClick={form.handleSubmit(onSubmit)} size={'lg'} variant={'default'}>Je valide ce titre !</Button>
             </div>
         </>
     );

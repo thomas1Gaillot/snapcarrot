@@ -18,8 +18,8 @@ export default function LoadingPage() {
     }, [router]);
 
     return (
-        <div className="flex items-center justify-center h-screen">
-            <div className="flex flex-col items-center space-y-4">
+        <>
+            <div className="flex flex-col items-center justify-center h-screen space-y-4">
                 <div className="animate-bounce">
                     <Image
                         src="/carrot.ico" // Replace with your logo's path
@@ -28,8 +28,8 @@ export default function LoadingPage() {
                         height={100} // Set the height of your logo
                     />
                 </div>
-                <TypographyLead>Les carottes sont cuites ...</TypographyLead>
+                <TypographyLead>Les carottes cuisent ...</TypographyLead>
             </div>
-        </div>
+        </>
     );
 }
