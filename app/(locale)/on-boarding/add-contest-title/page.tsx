@@ -1,15 +1,12 @@
 'use client'
 import {Button} from "@/components/ui/button";
-import Image from "next/image";
-import {TypographyH1, TypographyP, TypographySmall} from "@/components/ui/typography";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {TypographyH1} from "@/components/ui/typography";
+import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form";
 import {z} from "zod";
 import {Input} from "@/components/ui/input";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import useUserStore from "@/domain/useUserStore";
 import {useRouter} from "next/navigation";
-import Logo from "@/components/[locale]/Logo";
 import {UndoIcon} from "lucide-react";
 import useContestStore from "@/domain/useContestStore";
 
@@ -39,8 +36,9 @@ export default function AddContestTitle() {
     }
 
     return (<>
-            <Button className={'w-max'} onClick={() => router.push('/on-boarding/create-join-contest')} variant={'secondary'}>
-                <UndoIcon className={"text-gray-800 size-4"} />
+            <Button className={'w-max'} onClick={() => router.push('/on-boarding/create-join-contest')}
+                    variant={'secondary'}>
+                <UndoIcon className={"text-gray-800 size-4"}/>
             </Button>
             <TypographyH1>{'Le titre de mon concours'}</TypographyH1>
             <p className={"leading-7 text-gray-800"}>
@@ -51,19 +49,20 @@ export default function AddContestTitle() {
                     <FormField
                         control={form.control}
                         name="title"
-                        render={({ field }) => (
+                        render={({field}) => (
                             <FormItem>
                                 <FormControl>
                                     <Input placeholder="Meilleures photos de l'année" {...field} />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage/>
                             </FormItem>
                         )}
                     />
                 </form>
             </Form>
             <div className={"grid gap-2 text-center py-4"}>
-                <Button type={"submit"} onClick={form.handleSubmit(onSubmit)} size={'lg'} variant={'default'}>Je valide ce titre !</Button>
+                <Button type={"submit"} onClick={form.handleSubmit(onSubmit)} size={'lg'} variant={'default'}>Je valide
+                    ce titre !</Button>
             </div>
         </>
     );
