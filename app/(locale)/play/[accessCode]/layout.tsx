@@ -1,31 +1,39 @@
-import {useState} from "react";
+'use client'
+import {useParams, useRouter} from "next/navigation";
 import axios from "axios";
-import {toast} from "@/components/hooks/use-toast";
-import {useRouter} from "next/navigation";
-import useContestStore from "@/domain/contest/useContestStore";
-import {Contest} from "@/domain/contest/Contest";
-import {lucideStringToIcon} from "@/domain/theme/utils";
+import {useEffect} from "react";
 import {Theme} from "@/domain/theme/Theme";
+import {lucideStringToIcon} from "@/domain/theme/utils";
+import {Contest} from "@/domain/contest/Contest";
+import useContestStore from "@/domain/contest/useContestStore";
+import {toast} from "@/components/hooks/use-toast";
 
-export default function useJoinContest() {
-    const [isLoading, setIsLoading] = useState(false)
-    const router = useRouter()
-    const {setContest} = useContestStore()
+export default function Layout({ children,
+                               }: Readonly<{
+    children: React.ReactNode;
+}>) {
+    const {accessCode} = useParams();
+    const router = useRouter();
+    const {setContest} = useContestStore();
 
-    async function findContest(accessCode: string) {
+
+    useEffect(() => {
+        if (accessCode) {
+            fetchContestFromAccessCode();
+        }
+    }, [accessCode]);
+    async function fetchContestFromAccessCode() {
         try {
-            setIsLoading(true)
             const contest = await axios.get(`/api/contest/find?accessCode=${accessCode}`)
-
             const themes = await axios.get(`/api/theme/${contest.data.id}/list`)
-            const contestThemes:Theme[] = themes.data.map((theme: any) => ({
+            const contestThemes: Theme[] = themes.data.map((theme: any) => ({
                 id: theme.id,
                 name: theme.name,
                 icon: {
                     name: theme.icon,
                     jsx: lucideStringToIcon(theme.icon).iconJSX,
                 },
-                selected : true
+                selected: true
             }))
 
             const contestData: Contest = {
@@ -42,15 +50,13 @@ export default function useJoinContest() {
             setContest(contestData)
             router.push(`/play/${contest.data.accessCode}/upload-photos`)
 
-            setIsLoading(false)
         } catch (e: any) {
             if (e?.response?.status === 404) {
                 toast({title: 'Aucun concours photo trouvé avec ce code.'})
             }
             console.error(e)
-            setIsLoading(false)
         }
     }
+    return <>{children}</>
 
-    return {fetchThemesIsLoading: isLoading, findContest}
 }

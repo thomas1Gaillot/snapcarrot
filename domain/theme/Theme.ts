@@ -12,6 +12,7 @@ import {
 import {ForwardRefExoticComponent, RefAttributes} from "react";
 
 export type Theme = {
+    id?: string;
     name: string;
     icon: {
         jsx ?: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,

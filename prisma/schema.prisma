@@ -13,6 +13,7 @@ model User {
   email   String    @unique
   name    String?
   Contest Contest[]
+  Photo   Photo[]
 }
 
 model Contest {
@@ -28,6 +29,7 @@ model Contest {
   endDate     DateTime?
   userId      Int
   user        User      @relation(fields: [userId], references: [id])
+  photo       Photo[]
 }
 
 enum Status {
@@ -42,4 +44,16 @@ model Theme {
   icon      String
   Contest   Contest? @relation(fields: [contestId], references: [id])
   contestId Int?
+  photo     Photo[]
+}
+
+model Photo {
+  id        Int     @id @default(autoincrement())
+  url       String
+  themeId   Int
+  userId    Int
+  contestId Int
+  user      User    @relation(fields: [userId], references: [id])
+  theme     Theme   @relation(fields: [themeId], references: [id])
+  contest   Contest @relation(fields: [contestId], references: [id])
 }

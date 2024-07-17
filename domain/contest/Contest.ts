@@ -2,6 +2,7 @@ import {z} from "zod";
 import {Theme} from "@/domain/theme/Theme";
 
 export interface Contest {
+    id: string;
     title: string;
     accessCode?: string;
     description: string;

@@ -13,7 +13,7 @@ import {useRouter} from "next/navigation";
 import {useEffect} from "react";
 import {Button} from "@/components/ui/button";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import PlayContestContent from "@/app/(locale)/play/components/PlayContestContent";
+import PlayContestContent from "@/app/(locale)/play/[accessCode]/components/PlayContestContent";
 
 export default function UploadPhotosPage() {
     const {user} = useUserStore()

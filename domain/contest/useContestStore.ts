@@ -4,8 +4,9 @@ import {Contest} from "@/domain/contest/Contest";
 import {Status} from "@/domain/status/Status";
 
 interface ContestState {
+    id:string;
     title: string;
-    accessCode?: string;
+    accessCode: string;
     description : string,
     themes: Theme[];
     endDate: string;
@@ -24,6 +25,7 @@ interface ContestState {
 }
 
 const useContestStore = create<ContestState>((set) => ({
+    id: "",
     title: "",
     accessCode: "",
     setAccessCode: (accessCode: string) => set({accessCode}),
@@ -43,6 +45,7 @@ const useContestStore = create<ContestState>((set) => ({
         set({winner: contest.winner})
         set({status: contest.status})
         set({accessCode: contest.accessCode})
+        set({id: contest.id})
     },
     startDate: "",
     setStartDate: (startDate: string) => set({startDate}),

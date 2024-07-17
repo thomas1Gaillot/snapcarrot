@@ -38,11 +38,7 @@ export default function usePublishContest() {
         description,
         themes,
         setThemes,
-        setAccessCode,
-        setTitle,
-        setDescription,
-        endDate,
-        setEndDate
+        setContest
     } = useContestStore()
 
     async function publishContest() {
@@ -54,10 +50,17 @@ export default function usePublishContest() {
             userId: user.id,
             endDate: add1MonthFromNowOn()
         })
-        setAccessCode(contestCreated.data.accessCode)
-        setTitle(contestCreated.data.title)
-        setDescription(contestCreated.data.description)
-        setEndDate(contestCreated.data.endDate)
+        setContest({
+            id: contestCreated.data.id,
+            title: contestCreated.data.title,
+            description: contestCreated.data.description,
+            endDate: contestCreated.data.endDate,
+            themes : [],
+            winner: contestCreated.data.winner,
+            status: contestCreated.data.status,
+            startDate: contestCreated.data.startDate,
+            accessCode: contestCreated.data.accessCode
+        })
 
         let contestThemes: Theme[] = []
         const selectedThemes = themes.filter(theme => theme.selected)
