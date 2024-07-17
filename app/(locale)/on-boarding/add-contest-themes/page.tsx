@@ -4,6 +4,8 @@ import {TypographyH1} from "@/components/ui/typography";
 import {useRouter} from "next/navigation";
 import {UndoIcon} from "lucide-react";
 import useContestStore from "@/domain/useContestStore";
+import {toast} from "@/components/hooks/use-toast";
+import {cn} from "@/lib/utils";
 
 
 export default function AddContestThemes() {
@@ -11,6 +13,11 @@ export default function AddContestThemes() {
     const {themes, setThemes} = useContestStore()
 
     function onSubmit() {
+        const numSelectedThemes = themes.filter(theme => theme.selected).length
+        if(numSelectedThemes < 1) {
+            toast({title : 'Veuillez sélectionner au moins un thème'})
+            return;
+        }
         setThemes(themes)
         router.push('/on-boarding/publish-contest')
     }
@@ -30,12 +37,21 @@ export default function AddContestThemes() {
             <p className={"leading-7 text-gray-800"}>
                 {"Ajoutez des thèmes pour votre concours. Les participants pourront soumettre des photos en fonction de ces thèmes."}
             </p>
+        <div className={"grid grid-cols-2 gap-2"}>
             {themes.map((theme, index) => (
-                <Button variant={theme.selected ? 'secondary' : 'ghost'} onClick={() => toggleTheme(index)} size={'lg'}
+
+                <Button className={cn("h-12 ", theme.selected && 'border border-primary')} variant={theme.selected ? 'secondary' : 'outline'} onClick={() => toggleTheme(index)}
                         key={index}>
-                    <span className={"text-gray-800"}>{theme.name}</span>
+                    <div className={"flex gap-2 items-center"}>
+                    <theme.icon />
+                    <span className={"text-gray-800 italic "}>
+                        {theme.name}
+                    </span>
+                    </div>
                 </Button>
+
             ))}
+        </div>
             <div className={"grid gap-2 text-center py-4"}>
                 <Button type={"submit"} onClick={onSubmit} size={'lg'} variant={'default'}>Etape suivante</Button>
             </div>
