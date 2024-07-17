@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {User} from "@/domain/User";
+import {User} from "@/domain/user/User";
 
 interface UserState {
     user: User;
@@ -7,7 +7,7 @@ interface UserState {
 }
 
 const useArticleStore = create<UserState>((set) => ({
-    user: {} as User,
+    user: {name : 'totoG'} as User,
     setUser: (user: User) => set({user}),
 }));
 export default useArticleStore;

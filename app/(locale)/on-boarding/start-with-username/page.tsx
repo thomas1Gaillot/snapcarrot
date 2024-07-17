@@ -7,12 +7,12 @@ import {z} from "zod";
 import {Input} from "@/components/ui/input";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import useUserStore from "@/domain/useUserStore";
+import useUserStore from "@/domain/user/useUserStore";
 import {useRouter} from "next/navigation";
 import Logo from "@/components/[locale]/Logo";
 
 const formSchema = z.object({
-    username: z.string().min(2, {
+    name: z.string().min(2, {
         message: "Le nom de jeu doit contenir au moins 2 caractères.",
     }),
 })
@@ -24,7 +24,7 @@ export default function StartwithUsernamePage() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            name: "",
         },
     })
 
@@ -32,7 +32,7 @@ export default function StartwithUsernamePage() {
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        setUser({...user, name : values.username})
+        setUser({...user, name : values.name})
         router.push('/on-boarding/create-join-contest')
     }
 
@@ -46,7 +46,7 @@ export default function StartwithUsernamePage() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
                         control={form.control}
-                        name="username"
+                        name="name"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>

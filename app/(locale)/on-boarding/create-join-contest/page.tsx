@@ -1,5 +1,5 @@
 'use client'
-import useUserStore from "@/domain/useUserStore";
+import useUserStore from "@/domain/user/useUserStore";
 import {UndoIcon} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {TypographyH1, TypographyP} from "@/components/ui/typography";

@@ -13,9 +13,9 @@ interface ContestState {
 }
 
 const useContestStore = create<ContestState>((set) => ({
-    title: "",
+    title: "Concours Photo 2024",
     setTitle: (title: string) => set({title}),
-    description: "",
+    description: "Le concours photo nöel 2024 de la famille Boulanger.",
     setDescription: (description: string) => set({description}),
     themes: defaultThemes,
     setThemes: (themes: Theme[]) => set({themes}),
