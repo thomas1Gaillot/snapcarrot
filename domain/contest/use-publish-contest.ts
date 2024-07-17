@@ -18,22 +18,32 @@ function serializeThemes(themes: Theme[]) {
     }))
 }
 
-function fromThemesObject(themes: any): Theme[] {
-
-    return themes.map((theme: any) => ({
+function fromThemeObject(theme: any): Theme {
+    return {
         name: theme.name,
         icon: {
             name: theme.icon,
             jsx: theme.icon
         },
         selected: true
-    }))
+    }
+
 }
 
 export default function usePublishContest() {
     const [isLoading, setIsLoading] = useState(false)
     const {user} = useUserStore()
-    const {title, description, themes, setThemes, setAccessCode, setTitle, setDescription, endDate, setEndDate} = useContestStore()
+    const {
+        title,
+        description,
+        themes,
+        setThemes,
+        setAccessCode,
+        setTitle,
+        setDescription,
+        endDate,
+        setEndDate
+    } = useContestStore()
 
     async function publishContest() {
         setIsLoading(true)
@@ -49,8 +59,15 @@ export default function usePublishContest() {
         setDescription(contestCreated.data.description)
         setEndDate(contestCreated.data.endDate)
 
-        const contestThemes = await axios.get(`/api/theme/${contestCreated.data.id}/list`)
-        setThemes(fromThemesObject(contestThemes.data))
+        let contestThemes: Theme[] = []
+        await themes.map(async (theme: Theme) => {
+            const addedTheme = await axios.post(`/api/theme/${contestCreated.data.id}/create`, {
+                name: theme.name,
+                icon: theme.icon.name,
+            });
+            contestThemes.push(fromThemeObject(addedTheme.data))
+        })
+        setThemes(contestThemes)
         setIsLoading(false)
     }
 

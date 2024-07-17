@@ -7,6 +7,8 @@ import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, Form
 import {z} from "zod";
 import {Button} from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography";
+import {UndoIcon} from "lucide-react";
+import {useRouter} from "next/navigation";
 
 const FormSchema = z.object({
     accessCode: z.string().min(6, {
@@ -15,6 +17,7 @@ const FormSchema = z.object({
 })
 
 export default function JoinContestPage() {
+    const router = useRouter()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -34,6 +37,9 @@ export default function JoinContestPage() {
     }
 
     return <>
+        <Button className={'w-max'} onClick={() => router.push('/on-boarding/create-join-contest')} variant={'secondary'}>
+            <UndoIcon className={"text-gray-800 size-4"} />
+        </Button>
         <TypographyH1>Rejoindre un concours</TypographyH1>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
