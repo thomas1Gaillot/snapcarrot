@@ -39,6 +39,10 @@ const useContestStore = create<ContestState>((set) => ({
         set({description: contest.description})
         set({themes: contest.themes})
         set({endDate: contest.endDate})
+        set({startDate: contest.startDate})
+        set({winner: contest.winner})
+        set({status: contest.status})
+        set({accessCode: contest.accessCode})
     },
     startDate: "",
     setStartDate: (startDate: string) => set({startDate}),
