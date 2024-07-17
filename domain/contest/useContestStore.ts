@@ -17,11 +17,11 @@ interface ContestState {
 }
 
 const useContestStore = create<ContestState>((set) => ({
-    title: "Concours Photo 2024",
+    title: "",
     accessCode: "",
     setAccessCode: (accessCode: string) => set({accessCode}),
     setTitle: (title: string) => set({title}),
-    description: "Le concours photo nöel 2024 de la famille Boulanger.",
+    description: "",
     setDescription: (description: string) => set({description}),
     themes: defaultThemes,
     setThemes: (themes: Theme[]) => set({themes}),

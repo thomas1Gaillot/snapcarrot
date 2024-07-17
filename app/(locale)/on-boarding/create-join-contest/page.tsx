@@ -15,7 +15,7 @@ export default function CreateJoinContest() {
         <TypographyH1>{`Bienvenue ${user.name}`}</TypographyH1>
         <TypographyP>{"Créez un concours ou rejoignez-en un pour commencer à jouer."}</TypographyP>
         <div className={"grid grid-cols-2 gap-4 py-4"}>
-            <Button  size={'lg'} variant={'secondary'} disabled={true}>Rejoindre un concours</Button>
+            <Button  size={'lg'} variant={'secondary'} onClick={() => router.push('/on-boarding/join-contest')}>Rejoindre un concours</Button>
             <Button  size={'lg'}  onClick={() => router.push('/on-boarding/add-contest-title')} variant={'default'}>Créer un concours</Button>
         </div>
     </>

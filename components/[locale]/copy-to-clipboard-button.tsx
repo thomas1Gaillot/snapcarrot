@@ -20,7 +20,7 @@ const CopyToClipboardButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
         });
 
         clipboard.on('success', () => {
-            toast({title :'Article copié au format texte'});
+            toast({title :'Copié !'});
         });
 
         clipboard.on('error', () => {

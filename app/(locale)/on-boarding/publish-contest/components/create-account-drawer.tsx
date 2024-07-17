@@ -55,7 +55,7 @@ export default function CreateAccountDrawer({openDrawer, setOpenDrawer}: {
                                 name="name"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Nom d'utilisateur</FormLabel>
+                                        <FormLabel>{'Nom d\'utilisateur'}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="Jean Dupont" {...field} />
