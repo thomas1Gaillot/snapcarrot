@@ -17,7 +17,7 @@ import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import useContestStore from "@/domain/contest/useContestStore";
-import {lucideStringToIcon} from "@/domain/theme/utils";
+import {IconRenderer, lucideStringToIcon} from "@/domain/theme/utils";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -39,10 +39,14 @@ export default function AddThemeDrawer() {
     })
 
     function onAddThemeSubmit(values: z.infer<typeof formSchema>) {
-        setThemes([...themes, {name: values.name, icon: lucideStringToIcon(values.icon).icon, selected: true}])
+        setThemes([...themes, {
+            name: values.name, icon: {
+                name: values.icon,
+                jsx: lucideStringToIcon(values.icon).iconJSX
+            }, selected: true
+        }])
         setOpenDrawer(false)
     }
-
 
 
     return <Drawer open={openDrawer} onOpenChange={setOpenDrawer}>
@@ -96,14 +100,20 @@ export default function AddThemeDrawer() {
                                             <SelectContent>
                                                 <SelectItem
                                                     value="SwatchBookIcon">
-                                                    {lucideStringToIcon('SwatchBookIcon').iconJSX}
+                                                    <IconRenderer iconName={'SwatchBookIcon'}/>
                                                 </SelectItem>
                                                 <SelectItem
-                                                    value="CookingPotIcon">{lucideStringToIcon('CookingPot').iconJSX}</SelectItem>
+                                                    value="CookingPotIcon">
+                                                    <IconRenderer iconName={'CookingPot'}/>
+                                                </SelectItem>
                                                 <SelectItem
-                                                    value="SmileIcon">{lucideStringToIcon('SmileIcon').iconJSX}</SelectItem>
+                                                    value="SmileIcon">
+                                                    <IconRenderer iconName={'SmileIcon'}/>
+                                                </SelectItem>
                                                 <SelectItem
-                                                    value="FerrisWheelIcon">{lucideStringToIcon('FerrisWheelIcon').iconJSX}</SelectItem>
+                                                    value="FerrisWheelIcon">
+                                                    <IconRenderer iconName={'FerrisWheelIcon'}/>
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage/>

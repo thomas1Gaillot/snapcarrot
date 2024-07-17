@@ -9,6 +9,8 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useRouter} from "next/navigation";
 import {UndoIcon} from "lucide-react";
 import useContestStore from "@/domain/contest/useContestStore";
+import {useEffect} from "react";
+import {defaultThemes} from "@/domain/theme/Theme";
 
 const formSchema = z.object({
     title: z.string().min(2, {
@@ -19,6 +21,7 @@ const formSchema = z.object({
 export default function AddContestTitle() {
     const router = useRouter()
     const {title, setTitle} = useContestStore()
+
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

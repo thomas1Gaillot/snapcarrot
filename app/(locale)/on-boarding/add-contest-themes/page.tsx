@@ -7,12 +7,17 @@ import useContestStore from "@/domain/contest/useContestStore";
 import {toast} from "@/components/hooks/use-toast";
 import {cn} from "@/lib/utils";
 import AddThemeDrawer from "@/app/(locale)/on-boarding/add-contest-themes/components/add-theme-drawer";
+import {useEffect} from "react";
+import {defaultThemes} from "@/domain/theme/Theme";
 
 
 export default function AddContestThemes() {
     const router = useRouter()
     const {themes, setThemes} = useContestStore()
 
+    useEffect(() => {
+        setThemes(defaultThemes)
+    }, []);
 
     function onSubmit() {
         const numSelectedThemes = themes.filter(theme => theme.selected).length
