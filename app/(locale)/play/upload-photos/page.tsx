@@ -1,5 +1,5 @@
 'use client'
-import {TypographyH1, TypographyH4, TypographyMuted, TypographyP} from "@/components/ui/typography";
+import {TypographyH1, TypographyH4, TypographyMuted, TypographyP, TypographySmall} from "@/components/ui/typography";
 import {CameraIcon, UndoIcon} from "lucide-react";
 import useUserStore from "@/domain/user/useUserStore";
 import useContestStore from "@/domain/contest/useContestStore";
@@ -40,6 +40,7 @@ export default function UploadPhotosPage() {
                     </TabsList>
                     <TabsContent value="open">
                         <div className={"grid gap-1"}>
+                            <TypographySmall><>Vous avez particité sur 0 des {selectedThemes?.length} photos.</></TypographySmall>
                             <TypographyH4>N°1 Phase de publication</TypographyH4>
                             <TypographyP>{'Pour chaque thème, importez une photo qui correspond le mieux au thème.'}</TypographyP>
                         </div>
