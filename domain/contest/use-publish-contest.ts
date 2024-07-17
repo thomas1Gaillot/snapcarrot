@@ -60,7 +60,8 @@ export default function usePublishContest() {
         setEndDate(contestCreated.data.endDate)
 
         let contestThemes: Theme[] = []
-        await themes.map(async (theme: Theme) => {
+        const selectedThemes = themes.filter(theme => theme.selected)
+        await selectedThemes.map(async (theme: Theme) => {
             const addedTheme = await axios.post(`/api/theme/${contestCreated.data.id}/create`, {
                 name: theme.name,
                 icon: theme.icon.name,
