@@ -10,6 +10,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import useUserStore from "@/domain/user/useUserStore";
 import {useRouter} from "next/navigation";
 import Logo from "@/components/[locale]/Logo";
+import {useEffect} from "react";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -24,9 +25,12 @@ export default function StartwithUsernamePage() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            name: user.name,
         },
     })
+    useEffect(() => {
+        form.setValue('name', user.name)
+    },[user.name])
 
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -50,7 +54,7 @@ export default function StartwithUsernamePage() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input placeholder="Choisissez un nom d'utilisateur unique" {...field} />
+                                    <Input placeholder="Choisissez un nom ou pseudo" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
