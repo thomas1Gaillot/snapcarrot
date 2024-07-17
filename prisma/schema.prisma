@@ -17,7 +17,7 @@ model User {
 
 model Contest {
   id          Int       @id @default(autoincrement())
-  accessCode  String
+  accessCode  String    @unique
   title       String
   description String
   theme       Theme[] // In PostgreSQL, this will be stored as a text array

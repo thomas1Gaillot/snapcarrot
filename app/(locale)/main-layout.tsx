@@ -7,6 +7,10 @@ export default function MainLayout({children}: Readonly<{ children: React.ReactN
 
     return (
         <PageTransition key={pathname}>
-            {children}
+            <div className={"flex flex-col md:justify-center  h-screen p-4 py-8"}>
+                <div className={"max-w-lg mx-auto flex flex-col h-full  md:justify-center gap-4 "}>
+                    {children}
+                </div>
+            </div>
         </PageTransition>)
 }

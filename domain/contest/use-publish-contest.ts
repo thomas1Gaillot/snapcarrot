@@ -61,7 +61,6 @@ export default function usePublishContest() {
 
         let contestThemes: Theme[] = []
         const selectedThemes = themes.filter(theme => theme.selected)
-        console.log('publishContest', selectedThemes, themes)
         await selectedThemes.map(async (theme: Theme) => {
             const addedTheme = await axios.post(`/api/theme/${contestCreated.data.id}/create`, {
                 name: theme.name,

@@ -9,6 +9,7 @@ import {Button} from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography";
 import {UndoIcon} from "lucide-react";
 import {useRouter} from "next/navigation";
+import useJoinContest from "@/domain/contest/use-join-contest";
 
 const FormSchema = z.object({
     accessCode: z.string().min(6, {
@@ -18,6 +19,7 @@ const FormSchema = z.object({
 
 export default function JoinContestPage() {
     const router = useRouter()
+    const {findContest, fetchThemesIsLoading}=  useJoinContest()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -25,15 +27,8 @@ export default function JoinContestPage() {
         },
     })
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        toast({
-            title: "You submitted the following values:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-            ),
-        })
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
+       await findContest(data.accessCode)
     }
 
     return <>
@@ -66,14 +61,14 @@ export default function JoinContestPage() {
 
                             </FormControl>
                             <FormDescription>
-                                {'Entrez le code reçu par l\'un de vos amis pour rejoindre un concours.'}
+                                {"Entrez le code que l'on vous a partagé pour rejoindre un concours."}
                             </FormDescription>
                             <FormMessage/>
                         </FormItem>
                     )}
                 />
                 <div className={"w-full flex justify-end"}>
-                    <Button type="submit">Rejoindre le concours</Button>
+                    <Button loading={fetchThemesIsLoading} type="submit">Rejoindre le concours</Button>
                 </div>
             </form>
         </Form>
