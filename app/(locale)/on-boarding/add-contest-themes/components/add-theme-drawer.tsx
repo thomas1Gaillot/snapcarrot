@@ -16,7 +16,8 @@ import {useState} from "react";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-import useContestStore from "@/domain/useContestStore";
+import useContestStore from "@/domain/contest/useContestStore";
+import {lucideStringToIcon} from "@/domain/theme/utils";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -42,13 +43,7 @@ export default function AddThemeDrawer() {
         setOpenDrawer(false)
     }
 
-    function lucideStringToIcon(icon: string) {
-        const Icon = require("lucide-react")[icon]
-        return {
-            icon: Icon,
-            iconJSX: <Icon/>
-        }
-    }
+
 
     return <Drawer open={openDrawer} onOpenChange={setOpenDrawer}>
         <DrawerTrigger asChild>

@@ -9,7 +9,37 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id      Int       @id @default(autoincrement())
+  email   String    @unique
+  name    String?
+  Contest Contest[]
+}
+
+model Contest {
+  id          Int       @id @default(autoincrement())
+  accessCode  String
+  title       String
+  description String
+  theme       Theme[] // In PostgreSQL, this will be stored as a text array
+  winner      String?
+  status      Status
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  endDate     DateTime?
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+}
+
+enum Status {
+  open
+  voting
+  result
+}
+
+model Theme {
+  id        Int      @id @default(autoincrement())
+  name      String
+  icon      String
+  Contest   Contest? @relation(fields: [contestId], references: [id])
+  contestId Int?
 }

@@ -2,7 +2,7 @@ import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card";
 import {TypographyH4, TypographyMuted, TypographyP} from "@/components/ui/typography";
 import {CameraIcon} from "lucide-react";
 import useUserStore from "@/domain/user/useUserStore";
-import useContestStore from "@/domain/useContestStore";
+import useContestStore from "@/domain/contest/useContestStore";
 
 export default function ContestCard() {
 
@@ -32,7 +32,7 @@ export default function ContestCard() {
 
                             <CameraIcon className={'text-secondary-foreground/50'}/>
                             <div className={"flex items-center gap-1"}>
-                                <theme.icon className={'text-secondary-foreground/50 size-4'}/>
+                                {theme.icon.jsx && <theme.icon.jsx className={'text-secondary-foreground/50 size-4'}/>}
                                 <p className={"text-xs truncate text-secondary-foreground/50"}>{theme.name}</p>
                             </div>
 

@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button";
 import {TypographyH1} from "@/components/ui/typography";
 import {useRouter} from "next/navigation";
 import {UndoIcon} from "lucide-react";
-import useContestStore from "@/domain/useContestStore";
+import useContestStore from "@/domain/contest/useContestStore";
 import {toast} from "@/components/hooks/use-toast";
 import {cn} from "@/lib/utils";
 import AddThemeDrawer from "@/app/(locale)/on-boarding/add-contest-themes/components/add-theme-drawer";
@@ -48,7 +48,7 @@ export default function AddContestThemes() {
                             variant={theme.selected ? 'secondary' : 'outline'} onClick={() => toggleTheme(index)}
                             key={index}>
                         <div className={"flex gap-2 items-center"}>
-                            <theme.icon/>
+                            {theme.icon.jsx && <theme.icon.jsx/>}
                             <span className={"text-gray-800 italic "}>
                         {theme.name}
                     </span>

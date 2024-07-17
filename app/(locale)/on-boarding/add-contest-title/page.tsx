@@ -8,7 +8,7 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useRouter} from "next/navigation";
 import {UndoIcon} from "lucide-react";
-import useContestStore from "@/domain/useContestStore";
+import useContestStore from "@/domain/contest/useContestStore";
 
 const formSchema = z.object({
     title: z.string().min(2, {

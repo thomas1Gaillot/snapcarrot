@@ -163,7 +163,7 @@ const GitHubItem = ({
                 const data = await response.data.json();
                 setStars(data.stars);
             } catch (error) {
-                console.error('Failed to fetch stars:', error);
+                console.error('Failed to list stars:', error);
             }
         }
 
