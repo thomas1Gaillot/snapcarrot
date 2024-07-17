@@ -32,7 +32,7 @@ export default function UploadPhotosPage() {
                     <>{`par ${user.name}`}</>
                 </TypographyMuted>
                 <TypographyP>{description}</TypographyP>
-                <Tabs defaultValue="open" className="w-[400px]">
+                <Tabs defaultValue="open" className="w-full">
                     <TabsList className="grid w-full grid-cols-3 mb-4">
                         <TabsTrigger value="open">1. Jouer</TabsTrigger>
                         <TabsTrigger value="vote">2. Voter</TabsTrigger>
