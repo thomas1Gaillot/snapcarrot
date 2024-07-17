@@ -60,7 +60,7 @@ export default function JoinContestPage() {
 
                             </FormControl>
                             <FormDescription>
-                                Entrez le code reçu par l'un de vos amis pour rejoindre un concours.
+                                {'Entrez le code reçu par l\'un de vos amis pour rejoindre un concours.'}
                             </FormDescription>
                             <FormMessage/>
                         </FormItem>
