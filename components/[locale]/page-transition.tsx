@@ -12,6 +12,7 @@ const PageTransition: FC<{ children: ReactNode }> = ({ children }) => {
         <motion.div
             initial="hidden"
             animate="enter"
+            exit="exit"
             variants={variants}
             transition={{ duration: 0.5 }}
             className="h-full"

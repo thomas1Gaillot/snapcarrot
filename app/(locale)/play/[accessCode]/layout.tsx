@@ -1,17 +1,19 @@
 'use client'
 import {useParams, useRouter} from "next/navigation";
 import axios from "axios";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Theme} from "@/domain/theme/Theme";
 import {lucideStringToIcon} from "@/domain/theme/utils";
 import {Contest} from "@/domain/contest/Contest";
 import useContestStore from "@/domain/contest/useContestStore";
 import {toast} from "@/components/hooks/use-toast";
+import LoadingComponent from "@/components/[locale]/loading-component";
 
 export default function Layout({ children,
                                }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const [isLoading, setIsLoading] = useState(true);
     const {accessCode} = useParams();
     const router = useRouter();
     const {setContest} = useContestStore();
@@ -22,6 +24,12 @@ export default function Layout({ children,
             fetchContestFromAccessCode();
         }
     }, [accessCode]);
+
+    useEffect(() => {
+        if (!accessCode) {
+            router.push('/on-boarding/join-contest')
+        }
+    }, [accessCode])
     async function fetchContestFromAccessCode() {
         try {
             const contest = await axios.get(`/api/contest/find?accessCode=${accessCode}`)
@@ -48,15 +56,23 @@ export default function Layout({ children,
                 startDate: contest.data.startDate
             }
             setContest(contestData)
-            router.push(`/play/${contest.data.accessCode}/upload-photos`)
+            setIsLoading(false)
 
         } catch (e: any) {
             if (e?.response?.status === 404) {
                 toast({title: 'Aucun concours photo trouvé avec ce code.'})
             }
             console.error(e)
+            setIsLoading(false)
         }
     }
-    return <>{children}</>
+
+    if(isLoading) {
+        return <LoadingComponent />
+    }
+
+    return <>
+        {children}
+    </>
 
 }

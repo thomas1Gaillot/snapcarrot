@@ -1,24 +1,21 @@
 import {TypographyP, TypographySmall} from "@/components/ui/typography";
 import {CameraIcon} from "lucide-react";
-import {Button} from "@/components/ui/button";
 
 import useContestStore from "@/domain/contest/useContestStore";
 import useUserStore from "@/domain/user/useUserStore";
-import { Theme } from "@/domain/theme/Theme";
+import {Theme} from "@/domain/theme/Theme";
 import {useStoredPhotos} from "@/domain/photo/use-stored-photos";
 import {usePhotoPreviews} from "@/domain/photo/use-photo-preview";
-import {useFiles} from "@/domain/photo/use-files";
 import {useUploadPhoto} from "@/domain/photo/use-upload-photo";
 
 export default function PlayContestContent() {
-    const { themes, id } = useContestStore();
+    const {themes, id} = useContestStore();
     const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
-    const { user } = useUserStore();
-    const { storedPhotos, setStoredPhotos } = useStoredPhotos(selectedThemes);
-    const { previews, setPreview } = usePhotoPreviews();
-    const { files, setFile } = useFiles();
+    const {user} = useUserStore();
+    const {storedPhotos, setStoredPhotos} = useStoredPhotos(selectedThemes);
+    const {previews, setPreview} = usePhotoPreviews();
 
-    const { uploadPhoto, uploading } = useUploadPhoto({
+    const {uploadPhoto, uploading} = useUploadPhoto({
         userId: user?.id!,
         contestId: id!,
         setStoredPhotos
@@ -26,8 +23,8 @@ export default function PlayContestContent() {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, themeId: string) => {
         const selectedFile = e.target.files?.[0] || null;
-        setFile(themeId, selectedFile);
         setPreview(themeId, selectedFile);
+        uploadPhoto(selectedThemes.find(theme => theme.id === parseInt(themeId))!, selectedFile!);
     };
 
     const getStoredPhotoForTheme = (themeId: string) => {
@@ -48,12 +45,12 @@ export default function PlayContestContent() {
                     <div key={index} className={"grid gap-1"}>
                         <div className={"flex items-center gap-1"}>
                             {theme.icon.jsx && (
-                                <theme.icon.jsx className={"text-secondary-foreground/80 size-5"} />
+                                <theme.icon.jsx className={"text-secondary-foreground/80 size-5"}/>
                             )}
                             <p className={"text-xs truncate text-secondary-foreground/80"}>{theme.name}</p>
                         </div>
                         <div
-                            className="relative bg-secondary/50 hover:bg-secondary/80 flex flex-col justify-center items-center gap-4 aspect-[3/4] p-2 rounded"
+                            className="relative bg-secondary/50 hover:bg-secondary/80 flex flex-col justify-center items-center gap-4 aspect-[3/4] rounded"
                         >
                             <input
                                 type="file"
@@ -63,22 +60,14 @@ export default function PlayContestContent() {
                             />
                             {previews[theme.id!] ? (
                                 <img src={previews[theme.id!] || undefined} alt="Preview"
-                                     className="object-cover w-full h-full rounded" />
+                                     className="object-cover w-full h-full rounded"/>
                             ) : getStoredPhotoForTheme(theme.id!) ? (
                                 <img src={getStoredPhotoForTheme(theme.id!)?.url} alt="Stored Preview"
-                                     className="object-cover w-full h-full rounded" />
+                                     className="object-cover w-full h-full rounded"/>
                             ) : (
-                                <CameraIcon className="text-secondary-foreground/50 size-8" />
+                                <CameraIcon className="text-secondary-foreground/50 size-8"/>
                             )}
                         </div>
-                        <Button
-                            className={"w-full rounded"}
-                            onClick={() => uploadPhoto(theme, files[theme.id!]!)}
-                            variant={"secondary"}
-                            disabled={uploading[theme.id!]}
-                        >
-                            {uploading[theme.id!] ? "Uploading..." : "Sauvegarder l'image"}
-                        </Button>
                     </div>
                 ))}
             </div>

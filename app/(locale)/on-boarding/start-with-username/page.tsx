@@ -42,7 +42,7 @@ export default function StartwithUsernamePage() {
 
     return (<>
             <Logo/>
-            <TypographyH1>Bienvenue sur SnapCarrot</TypographyH1>
+            <TypographyH1>Bienvenue sur Zester</TypographyH1>
             <p className={"leading-7 text-gray-800"}>
                 {"Pour commencer, choisissez un nom d'utilisateur."}
             </p>

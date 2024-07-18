@@ -7,7 +7,7 @@ import MainLayout from "@/app/(locale)/main-layout";
 const inter = Inter({subsets: ["latin"]});
 
 export const metadata: Metadata = {
-    title: "Snapcarrot",
+    title: "Zester",
     description: "The photo contest made for families and friends.",
     icons: {
         icon: "/carrot.ico",

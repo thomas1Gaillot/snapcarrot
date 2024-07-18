@@ -2,7 +2,8 @@
 import { useEffect } from 'react';
 import Image from 'next/image'; // Import the Image component for Next.js
 import { useRouter } from 'next/navigation';
-import {TypographyLead, TypographySmall} from "@/components/ui/typography"; // Import the useRouter hook
+import {TypographyLead, TypographySmall} from "@/components/ui/typography";
+import LoadingComponent from "@/components/[locale]/loading-component"; // Import the useRouter hook
 
 export default function LoadingPage() {
     const router = useRouter();
@@ -19,17 +20,7 @@ export default function LoadingPage() {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center h-screen space-y-4">
-                <div className="animate-bounce">
-                    <Image
-                        src="/carrot.ico" // Replace with your logo's path
-                        alt="Logo"
-                        width={100} // Set the width of your logo
-                        height={100} // Set the height of your logo
-                    />
-                </div>
-                <TypographyLead>Les carottes cuisent ...</TypographyLead>
-            </div>
+            <LoadingComponent />
         </>
     );
 }

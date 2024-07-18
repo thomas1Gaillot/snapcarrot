@@ -8,11 +8,16 @@ import {useEffect} from "react";
 import {Button} from "@/components/ui/button";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import PlayContestContent from "@/app/(locale)/play/[accessCode]/components/PlayContestContent";
+import {CheckIcon} from "@radix-ui/react-icons";
+import {useStoredPhotos} from "@/domain/photo/use-stored-photos";
+import {Theme} from "@/domain/theme/Theme";
 
 export default function UploadPhotosPage() {
     const {user} = useUserStore()
     const router = useRouter()
     const {title, accessCode, description, themes, endDate} = useContestStore()
+    const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
+    const {storedPhotos} = useStoredPhotos(selectedThemes);
 
     useEffect(() => {
         if (!title || !description || !themes || !endDate) {
@@ -40,7 +45,12 @@ export default function UploadPhotosPage() {
                 <TypographyBlockquote>{description}</TypographyBlockquote>
                 <Tabs defaultValue="open" className="w-full mt-8">
                     <TabsList className="grid w-full grid-cols-3 mb-4">
-                        <TabsTrigger value="open">1. Jouer</TabsTrigger>
+                        <TabsTrigger value="open">
+                            <>
+                                1. Jouer
+                                {themes.length === storedPhotos.length && <CheckIcon className={"size-5"}/>}
+                            </>
+                    </TabsTrigger>
                         <TabsTrigger value="vote">2. Voter</TabsTrigger>
                         <TabsTrigger value="results">3. Résultats</TabsTrigger>
                     </TabsList>
