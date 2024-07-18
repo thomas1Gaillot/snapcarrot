@@ -1,8 +1,7 @@
 'use client'
 import {Button} from "@/components/ui/button";
-import Image from "next/image";
-import {TypographyH1, TypographyP, TypographySmall} from "@/components/ui/typography";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {TypographyH1, TypographySmall} from "@/components/ui/typography";
+import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form";
 import {z} from "zod";
 import {Input} from "@/components/ui/input";
 import {useForm} from "react-hook-form";
@@ -10,7 +9,8 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import useUserStore from "@/domain/user/useUserStore";
 import {useRouter} from "next/navigation";
 import Logo from "@/components/[locale]/Logo";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import CreateAccountDrawer from "@/app/(locale)/on-boarding/start-with-username/components/create-account-drawer";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -19,7 +19,9 @@ const formSchema = z.object({
 })
 
 export default function StartwithUsernamePage() {
-    const {user, setUser}= useUserStore()
+    const {user, setUser} = useUserStore()
+    const [openDrawer, setOpenDrawer] = useState(false)
+
     const router = useRouter()
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
@@ -30,14 +32,18 @@ export default function StartwithUsernamePage() {
     })
     useEffect(() => {
         form.setValue('name', user.name)
-    },[user.name])
+    }, [user.name])
 
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        setUser({...user, name : values.name})
-        router.push('/on-boarding/create-join-contest')
+        if (!user?.id) {
+            setUser({...user, name : values.name})
+            setOpenDrawer(true)
+        } else {
+            router.push('/on-boarding/create-join-contest')
+        }
     }
 
     return (<>
@@ -51,21 +57,26 @@ export default function StartwithUsernamePage() {
                     <FormField
                         control={form.control}
                         name="name"
-                        render={({ field }) => (
+                        render={({field}) => (
                             <FormItem>
                                 <FormControl>
                                     <Input placeholder="Choisissez un nom ou pseudo" {...field} />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage/>
                             </FormItem>
                         )}
                     />
                 </form>
             </Form>
             <div className={"grid gap-2 text-center py-4"}>
-                <Button type={"submit"} onClick={form.handleSubmit(onSubmit)} size={'lg'} variant={'default'}>Commencer</Button>
-                <TypographySmall>Cette application est gratuite. Les photos que vous importez seront supprimés après chaque concours.</TypographySmall>
+                <Button type={"submit"} onClick={form.handleSubmit(onSubmit)} size={'lg'}
+                        variant={'default'}>Commencer</Button>
+                <Button variant={"ghost"} onClick={form.handleSubmit(onSubmit)} size={'sm'}
+                        >{"J'ai déjà un compte"}</Button>
+                <TypographySmall>Cette application est gratuite. Les photos que vous importez seront supprimés après
+                    chaque concours.</TypographySmall>
             </div>
+            <CreateAccountDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer}/>
         </>
     );
 }

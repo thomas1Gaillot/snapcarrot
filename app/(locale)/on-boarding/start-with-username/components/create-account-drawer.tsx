@@ -1,5 +1,4 @@
 import {useForm} from "react-hook-form";
-import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {
     Drawer,
@@ -15,7 +14,6 @@ import {Input} from "@/components/ui/input";
 import useUserStore from "@/domain/user/useUserStore";
 import {UserSchema, userSchema} from "@/domain/user/User";
 import useCreateAccount from "@/domain/user/use-create-account";
-
 
 
 export default function CreateAccountDrawer({openDrawer, setOpenDrawer}: {
@@ -83,7 +81,8 @@ export default function CreateAccountDrawer({openDrawer, setOpenDrawer}: {
                 </div>
                 <DrawerFooter className={'grid grid-cols-2 gap-2'}>
                     <Button onClick={() => setOpenDrawer(false)} variant="outline">Annuler</Button>
-                    <Button loading={isCreateAccountLoading} onClick={form.handleSubmit(onCreateAccountSubmit)}>Valider</Button>
+                    <Button loading={isCreateAccountLoading}
+                            onClick={form.handleSubmit(onCreateAccountSubmit)}>Valider</Button>
                 </DrawerFooter>
             </div>
         </DrawerContent>
