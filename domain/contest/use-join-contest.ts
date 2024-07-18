@@ -6,6 +6,7 @@ import useContestStore from "@/domain/contest/useContestStore";
 import {Contest} from "@/domain/contest/Contest";
 import {lucideStringToIcon} from "@/domain/theme/utils";
 import {Theme} from "@/domain/theme/Theme";
+import {Status} from "@/domain/status/Status";
 
 export default function useJoinContest() {
     const [isLoading, setIsLoading] = useState(false)
@@ -36,7 +37,7 @@ export default function useJoinContest() {
                 winner: contest.data.winner,
                 themes: contestThemes,
                 accessCode: contest.data.accessCode,
-                status: contest.data.status,
+                status: Status.open,
                 startDate: contest.data.startDate
             }
             setContest(contestData)

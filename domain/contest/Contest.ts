@@ -1,5 +1,6 @@
 import {z} from "zod";
 import {Theme} from "@/domain/theme/Theme";
+import {Status} from "@/domain/status/Status";
 
 export interface Contest {
     id: string;
@@ -8,7 +9,7 @@ export interface Contest {
     description: string;
     themes: Theme[];
     winner: string;
-    status: string;
+    status: Status;
     startDate: string;
     endDate: string;
 }

@@ -24,7 +24,7 @@ export default function PlayContestContent() {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, themeId: string) => {
         const selectedFile = e.target.files?.[0] || null;
         setPreview(themeId, selectedFile);
-        uploadPhoto(selectedThemes.find(theme => theme.id === parseInt(themeId))!, selectedFile!);
+        uploadPhoto(selectedThemes.find(theme => theme?.id === themeId)!, selectedFile!);
     };
 
     const getStoredPhotoForTheme = (themeId: string) => {

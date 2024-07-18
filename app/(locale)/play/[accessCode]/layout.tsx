@@ -8,13 +8,15 @@ import {Contest} from "@/domain/contest/Contest";
 import useContestStore from "@/domain/contest/useContestStore";
 import {toast} from "@/components/hooks/use-toast";
 import LoadingComponent from "@/components/[locale]/loading-component";
+import {Status} from "@/domain/status/Status";
 
 export default function Layout({ children,
                                }: Readonly<{
     children: React.ReactNode;
 }>) {
     const [isLoading, setIsLoading] = useState(true);
-    const {accessCode} = useParams();
+    const params = useParams();
+    const accessCode = params ? params.accessCode : null;
     const router = useRouter();
     const {setContest} = useContestStore();
 
@@ -52,7 +54,7 @@ export default function Layout({ children,
                 winner: contest.data.winner,
                 themes: contestThemes,
                 accessCode: contest.data.accessCode,
-                status: contest.data.status,
+                status: Status.open,
                 startDate: contest.data.startDate
             }
             setContest(contestData)

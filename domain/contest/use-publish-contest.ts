@@ -3,6 +3,7 @@ import axios from "axios";
 import useUserStore from "@/domain/user/useUserStore";
 import useContestStore from "@/domain/contest/useContestStore";
 import {Theme} from "@/domain/theme/Theme";
+import {Status} from "@/domain/status/Status";
 
 function add1MonthFromNowOn() {
     const newDate = new Date()
@@ -57,7 +58,7 @@ export default function usePublishContest() {
             endDate: contestCreated.data.endDate,
             themes : [],
             winner: contestCreated.data.winner,
-            status: contestCreated.data.status,
+            status: Status.open,
             startDate: contestCreated.data.startDate,
             accessCode: contestCreated.data.accessCode
         })
