@@ -45,22 +45,20 @@ export const useUploadPhoto = ({ userId, contestId, setStoredPhotos }: UseUpload
             });
             await s3Client.send(command);
 
-            // const  res= await axios.post("/api/photo/signed-url", {
-            //     path: filePath,
-            //     bucket: process.env.NEXT_PUBLIC_SUPABASE_S3_NAME,
-            // });
+            // Demande de l'URL signée
+            const res = await axios.post("/api/photo/signed-url", {
+                path: filePath,
+            });
 
-            //const url = res.data.signedUrl;
-            const oldWorkingUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/s3/${process.env.NEXT_PUBLIC_SUPABASE_S3_NAME}/${filePath}`;
+            const signedUrl = res.data.signedUrl;
 
             const response = await axios.post("/api/photo/add", {
-                url:oldWorkingUrl,
+                url:signedUrl,
                 themeId: theme.id,
                 contestId: contestId,
                 userId: userId,
             });
 
-            alert(`File for theme ${theme.name} uploaded successfully`);
 
             const newPhoto: Photo = response.data;
 
