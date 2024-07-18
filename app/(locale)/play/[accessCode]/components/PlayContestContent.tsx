@@ -1,132 +1,46 @@
 import {TypographyP, TypographySmall} from "@/components/ui/typography";
 import {CameraIcon} from "lucide-react";
-import useContestStore from "@/domain/contest/useContestStore";
-import {useEffect, useState} from "react";
-import axios from "axios";
-import useUserStore from "@/domain/user/useUserStore";
-import {Theme} from "@/domain/theme/Theme";
 import {Button} from "@/components/ui/button";
-import {PutObjectCommand} from "@aws-sdk/client-s3";
-import s3Client from "@/lib/s3client";
-import {Photo} from "@/domain/photo/Photo";
 
+import useContestStore from "@/domain/contest/useContestStore";
+import useUserStore from "@/domain/user/useUserStore";
+import { Theme } from "@/domain/theme/Theme";
+import {useStoredPhotos} from "@/domain/photo/use-stored-photos";
+import {usePhotoPreviews} from "@/domain/photo/use-photo-preview";
+import {useFiles} from "@/domain/photo/use-files";
+import {useUploadPhoto} from "@/domain/photo/use-upload-photo";
 
 export default function PlayContestContent() {
-    const {themes, id} = useContestStore()
-    const selectedThemes = themes?.filter(theme => theme.selected)
-    const {user} = useUserStore()
-    const [files, setFiles] = useState({});
-    const [previews, setPreviews] = useState({})
-    const [storedPhotos, setStoredPhotos] = useState<{ [key: number]: Photo | null }>({});
+    const { themes, id } = useContestStore();
+    const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
+    const { user } = useUserStore();
+    const { storedPhotos, setStoredPhotos } = useStoredPhotos(selectedThemes);
+    const { previews, setPreview } = usePhotoPreviews();
+    const { files, setFile } = useFiles();
 
-    useEffect(() => {
-        if (user && id) {
-            fetchStoredPhotos();
-        }
-    }, [user, id]);
+    const { uploadPhoto, uploading } = useUploadPhoto({
+        userId: user?.id!,
+        contestId: id!,
+        setStoredPhotos
+    });
 
-    const fetchStoredPhotos = async () => {
-        try {
-            if (!selectedThemes) return;
-            const photosData = await Promise.all(
-                selectedThemes.map(async (theme) => {
-                    const response = await axios.get(`/api/photo/${user.id}/${id}/${theme.id}/list`);
-                    if (response.data) {
-                        return {
-                            themeId: theme.id,
-                            photo: response.data,
-                        };
-                    }
-                    return {themeId: theme.id, photo: null};
-                })
-            );
-
-            const photosMap = photosData.reduce((acc, {themeId, photo}) => {
-                acc[themeId] = photo;
-                return acc;
-            }, {});
-
-            setStoredPhotos(photosMap);
-        } catch (error) {
-            console.error("Error fetching stored photos:", error);
-        }
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, themeId: string) => {
+        const selectedFile = e.target.files?.[0] || null;
+        setFile(themeId, selectedFile);
+        setPreview(themeId, selectedFile);
     };
 
-    const handleFileChange = (e, themeId) => {
-        const selectedFile = e.target.files[0];
-        setFiles((prevFiles) => ({...prevFiles, [themeId]: selectedFile}));
-        if (selectedFile) {
-            setPreviews((prevPreviews) => ({
-                ...prevPreviews,
-                [themeId]: URL.createObjectURL(selectedFile),
-            }));
-        }
+    const getStoredPhotoForTheme = (themeId: string) => {
+        return storedPhotos.find(photo => photo.themeId === parseInt(themeId));
     };
 
-    const storeImages = async () => {
-        selectedThemes?.map(async (theme: Theme) => {
-            const file = files[theme.id];
-            if (!file) {
-                alert(`Veuillez sélectionner un fichier pour le thème ${theme.name}`);
-                return;
-            }
-            if (!user?.id) {
-                alert("Veuillez vous connecter pour participer");
-                return;
-            }
-            if (!id) {
-                alert("Concours non trouvé");
-                return;
-            }
-            if (!theme.id) {
-                alert("Thème non trouvé");
-                return;
-            }
-
-            try {
-                const filePath = `photos/${Date.now()}_${file.name}`;
-                const command = new PutObjectCommand({
-                    Bucket: process.env.NEXT_PUBLIC_SUPABASE_S3_NAME,
-                    Key: filePath,
-                    Body: file,
-                    ACL: "public-read",
-                });
-                const data = await s3Client.send(command);
-
-                // URL de l'image téléchargée
-                const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${process.env.NEXT_PUBLIC_SUPABASE_S3_NAME}/${filePath}`;
-
-                // Mettre à jour la base de données
-                await axios.post("/api/photo/add", {
-                    url,
-                    themeId: theme.id,
-                    contestId: id,
-                    userId: user.id,
-                });
-
-                alert(`File for theme ${theme.name} uploaded successfully`);
-
-                // Mettre à jour les prévisualisations stockées
-                setStoredPhotos((prevPhotos) => ({
-                    ...prevPhotos,
-                    [theme.id]: {id: data.Key, url, themeId: theme.id, userId: user.id, contestId: id},
-                }));
-            } catch (error) {
-                console.error("Error uploading file:", error);
-                alert(`Error uploading file for theme ${theme.name}`);
-            }
-        });
-    };
 
     return (
         <>
-            <Button className={"w-full rounded"} onClick={storeImages} variant={"secondary"}>
-                Sauvegarder les images
-            </Button>
             <div className={"grid gap-1"}>
                 <TypographyP>{"Pour chaque thème, chargez une photo qui correspond le mieux au thème."}</TypographyP>
                 <TypographySmall>
-                    <>Vous avez participé à 0 des {selectedThemes?.length} photos.</>
+                    <>Vous avez participé à {storedPhotos.length} des {selectedThemes?.length} photos.</>
                 </TypographySmall>
             </div>
             <div className="grid w-full gap-8 py-4">
@@ -134,7 +48,7 @@ export default function PlayContestContent() {
                     <div key={index} className={"grid gap-1"}>
                         <div className={"flex items-center gap-1"}>
                             {theme.icon.jsx && (
-                                <theme.icon.jsx className={"text-secondary-foreground/80 size-5"}/>
+                                <theme.icon.jsx className={"text-secondary-foreground/80 size-5"} />
                             )}
                             <p className={"text-xs truncate text-secondary-foreground/80"}>{theme.name}</p>
                         </div>
@@ -143,20 +57,28 @@ export default function PlayContestContent() {
                         >
                             <input
                                 type="file"
-                                onChange={(e) => handleFileChange(e, theme.id)}
+                                onChange={(e) => handleFileChange(e, theme.id!)}
                                 className="absolute inset-0 opacity-0 cursor-pointer"
                                 key={`${theme.name}-${index}`}
                             />
-                            {previews[theme.id] ? (
-                                <img src={previews[theme.id]} alt="Preview"
-                                     className="object-cover w-full h-full rounded"/>
-                            ) : storedPhotos[theme.id] ? (
-                                <img src={storedPhotos[theme.id]?.url} alt="Stored Preview"
-                                     className="object-cover w-full h-full rounded"/>
+                            {previews[theme.id!] ? (
+                                <img src={previews[theme.id!] || undefined} alt="Preview"
+                                     className="object-cover w-full h-full rounded" />
+                            ) : getStoredPhotoForTheme(theme.id!) ? (
+                                <img src={getStoredPhotoForTheme(theme.id!)?.url} alt="Stored Preview"
+                                     className="object-cover w-full h-full rounded" />
                             ) : (
-                                <CameraIcon className="text-secondary-foreground/50 size-8"/>
+                                <CameraIcon className="text-secondary-foreground/50 size-8" />
                             )}
                         </div>
+                        <Button
+                            className={"w-full rounded"}
+                            onClick={() => uploadPhoto(theme, files[theme.id!]!)}
+                            variant={"secondary"}
+                            disabled={uploading[theme.id!]}
+                        >
+                            {uploading[theme.id!] ? "Uploading..." : "Sauvegarder l'image"}
+                        </Button>
                     </div>
                 ))}
             </div>

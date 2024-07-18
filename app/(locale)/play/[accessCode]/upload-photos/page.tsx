@@ -1,12 +1,6 @@
 'use client'
-import {
-    TypographyBlockquote,
-    TypographyH4,
-    TypographyMuted,
-    TypographyP,
-    TypographySmall
-} from "@/components/ui/typography";
-import {CameraIcon, UndoIcon} from "lucide-react";
+import {TypographyBlockquote, TypographyH4, TypographyMuted, TypographyP} from "@/components/ui/typography";
+import {UndoIcon} from "lucide-react";
 import useUserStore from "@/domain/user/useUserStore";
 import useContestStore from "@/domain/contest/useContestStore";
 import {useRouter} from "next/navigation";
@@ -38,7 +32,9 @@ export default function UploadPhotosPage() {
                     <TypographyMuted>
                         <>{`publié par ${user.name}`}</>
                     </TypographyMuted>
-                    <TypographyMuted>code : {accessCode || ''}</TypographyMuted>
+                    <TypographyMuted>
+                        <>code : {accessCode || ''}</>
+                    </TypographyMuted>
 
                 </div>
                 <TypographyBlockquote>{description}</TypographyBlockquote>
