@@ -22,7 +22,7 @@ export default function RootLayout({
     return (<>
             <html>
             <body
-                className={`${inter.className} bg-secondary/20  w-screen overflow-x-hidden h-screen`}>
+                className={`${inter.className} bg-secondary/5  w-screen overflow-x-hidden h-screen`}>
             <MainLayout>
                 {children}
             </MainLayout>
