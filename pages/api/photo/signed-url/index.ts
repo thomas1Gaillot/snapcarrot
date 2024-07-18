@@ -18,7 +18,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .createSignedUrl(path, 60 * 60); // URL valable pendant 1 heure
 
     if(!data?.signedUrl){
-        return res.status(500).json({error : 'no data?.signedUrl'})
+        return res.status(500).json({
+            error : 'no data?.signedUrl',
+            s3_name : process.env.NEXT_PUBLIC_SUPABASE_S3_NAME,
+            data : data})
     }
     if (error) {
         return res.status(500).json({ error: error });
