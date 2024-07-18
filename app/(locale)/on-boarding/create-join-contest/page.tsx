@@ -27,15 +27,15 @@ export default function CreateJoinContest() {
             <Button  size={'lg'} variant={'secondary'} onClick={() => router.push('/on-boarding/join-contest')}>Rejoindre un concours</Button>
             <Button  size={'lg'}  onClick={() => router.push('/on-boarding/add-contest-title')} variant={'default'}>Créer un concours</Button>
         </div>
-        <TypographyH4>{`Les concours que j'ai créé`}</TypographyH4>
+        {contests.length >0 && <TypographyH4>{`Les concours que j'ai créé`}</TypographyH4>}
         <div className={"grid gap-4 py-4"}>
-            {contests.map(contest => <Card key={contest.id}>
-                <CardHeader onClick={() => router.push(`/play/${contest.accessCode}/upload-photos`)}>
+            {contests.map(contest =>
+                <Button variant={'ghost'} className={'flex flex-col items-start h-max'} key={contest.id} onClick={() => router.push(`/play/${contest.accessCode}/upload-photos`)}>
                     {contest.title}
                     <TypographySmall><>code : {contest.accessCode}</></TypographySmall>
                     <ArrowRightIcon className={"size-4"}/>
-                </CardHeader>
-            </Card>)}
+                </Button>
+            )}
         </div>
     </>
 }

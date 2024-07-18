@@ -56,4 +56,6 @@ model Photo {
   user      User    @relation(fields: [userId], references: [id])
   theme     Theme   @relation(fields: [themeId], references: [id])
   contest   Contest @relation(fields: [contestId], references: [id])
+
+  @@unique([userId, themeId, contestId])
 }

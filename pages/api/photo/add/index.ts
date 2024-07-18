@@ -14,8 +14,18 @@ const postPhoto = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-        const photo = await prisma.photo.create({
-            data: {
+        const photo = await prisma.photo.upsert({
+            where: {
+                userId_themeId_contestId: {
+                    userId: parseInt(userId, 10),
+                    themeId: parseInt(themeId, 10),
+                    contestId: parseInt(contestId, 10),
+                },
+            },
+            update: {
+                url,
+            },
+            create: {
                 url,
                 userId: parseInt(userId, 10),
                 themeId: parseInt(themeId, 10),
