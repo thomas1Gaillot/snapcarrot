@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import useContestStore from "@/domain/contest/useContestStore";
-import axios from "axios";
+import {apiClient} from "@/lib/axiosConfig";
 
 export default function useGeneralStatsContest() {
     const {id} = useContestStore();
@@ -11,7 +11,7 @@ export default function useGeneralStatsContest() {
 
     async function getGeneralStatsContest() {
         try {
-            const res = await axios.get(`/api/contest/${id}/general-stats`);
+            const res = await apiClient.get(`/api/contest/${id}/general-stats`);
             const {numberOfParticipants, numberOfThemes, numberOfPhotos} = res.data;
 
             setNumberOfParticipants(numberOfParticipants);

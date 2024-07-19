@@ -4,6 +4,7 @@ import useUserStore from "@/domain/user/useUserStore";
 import useContestStore from "@/domain/contest/useContestStore";
 import {Theme} from "@/domain/theme/Theme";
 import {Status} from "@/domain/status/Status";
+import {apiClient} from "@/lib/axiosConfig";
 
 function add1MonthFromNowOn() {
     const newDate = new Date()
@@ -44,7 +45,7 @@ export default function usePublishContest() {
 
     async function publishContest() {
         setIsLoading(true)
-        const contestCreated = await axios.post('/api/contest/create', {
+        const contestCreated = await apiClient.post('/api/contest/create', {
             title,
             description,
             themes: serializeThemes(themes),
@@ -66,7 +67,7 @@ export default function usePublishContest() {
         let contestThemes: Theme[] = []
         const selectedThemes = themes.filter(theme => theme.selected)
         await selectedThemes.map(async (theme: Theme) => {
-            const addedTheme = await axios.post(`/api/theme/${contestCreated.data.id}/create`, {
+            const addedTheme = await apiClient.post(`/api/theme/${contestCreated.data.id}/create`, {
                 name: theme.name,
                 icon: theme.icon.name,
             });

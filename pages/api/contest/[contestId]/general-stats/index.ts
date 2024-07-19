@@ -1,18 +1,18 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import axios from "axios";
+import {NextApiRequest, NextApiResponse} from "next";
+import {apiServer} from "@/lib/axiosConfig";
 
 const getGeneralStatsContest = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { contestId } = req.query;
+    const {contestId} = req.query;
 
     if (!contestId) {
-        return res.status(400).json({ error: 'Missing contestId' });
+        return res.status(400).json({error: 'Missing contestId'});
     }
 
     try {
         const [participantsRes, themesRes, photosRes] = await Promise.all([
-            axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/contest/${contestId}/number-of-participants`),
-            axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/contest/${contestId}/number-of-themes`),
-            axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/contest/${contestId}/number-of-photos`),
+            apiServer.get(`/api/contest/${contestId}/number-of-participants`),
+            apiServer.get(`/api/contest/${contestId}/number-of-themes`),
+            apiServer.get(`/api/contest/${contestId}/number-of-photos`),
         ]);
 
         if (!participantsRes.data || !themesRes.data || !photosRes.data) {
@@ -26,7 +26,7 @@ const getGeneralStatsContest = async (req: NextApiRequest, res: NextApiResponse)
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({error: 'Internal Server Error'});
     }
 }
 

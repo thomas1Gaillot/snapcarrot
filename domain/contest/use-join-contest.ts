@@ -7,6 +7,7 @@ import {Contest} from "@/domain/contest/Contest";
 import {lucideStringToIcon} from "@/domain/theme/utils";
 import {Theme} from "@/domain/theme/Theme";
 import {Status} from "@/domain/status/Status";
+import {apiClient} from "@/lib/axiosConfig";
 
 export default function useJoinContest() {
     const [isLoading, setIsLoading] = useState(false)
@@ -16,9 +17,9 @@ export default function useJoinContest() {
     async function findContest(accessCode: string) {
         try {
             setIsLoading(true)
-            const contest = await axios.get(`/api/contest/find?accessCode=${accessCode}`)
+            const contest = await apiClient.get(`/api/contest/find?accessCode=${accessCode}`)
 
-            const themes = await axios.get(`/api/theme/${contest.data.id}/list`)
+            const themes = await apiClient.get(`/api/theme/${contest.data.id}/list`)
             const contestThemes:Theme[] = themes.data.map((theme: any) => ({
                 id: theme.id,
                 name: theme.name,
