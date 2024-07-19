@@ -1,8 +1,6 @@
 'use client'
-import { useEffect } from 'react';
-import Image from 'next/image'; // Import the Image component for Next.js
-import { useRouter } from 'next/navigation';
-import {TypographyLead, TypographySmall} from "@/components/ui/typography";
+import {useEffect} from 'react';
+import {useRouter} from 'next/navigation';
 import LoadingComponent from "@/components/[locale]/loading-component";
 import useUserStore from "@/domain/user/useUserStore"; // Import the useRouter hook
 
@@ -13,7 +11,7 @@ export default function LoadingPage() {
     useEffect(() => {
         // Set a timeout to redirect after 1 second
         const timer = setTimeout(() => {
-            if(user?.id){
+            if (user?.id) {
                 router.push('/on-boarding/create-join-contest');
             } else {
                 router.push('/on-boarding/start-with-username');
@@ -26,7 +24,9 @@ export default function LoadingPage() {
 
     return (
         <>
-            <LoadingComponent />
+            <div className="flex flex-col items-center justify-center h-screen space-y-4">
+                <LoadingComponent/>
+            </div>
         </>
     );
 }

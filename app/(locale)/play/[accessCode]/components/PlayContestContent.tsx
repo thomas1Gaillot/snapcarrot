@@ -9,6 +9,8 @@ import { useStoredPhotos } from "@/domain/photo/use-stored-photos";
 import { usePhotoPreviews } from "@/domain/photo/use-photo-preview";
 import { useUploadPhoto } from "@/domain/photo/use-upload-photo";
 import { Button } from "@/components/ui/button";
+import {cn} from "@/lib/utils";
+import LoadingComponent from "@/components/[locale]/loading-component";
 
 export default function PlayContestContent() {
     const { themes, id } = useContestStore();
@@ -69,8 +71,12 @@ export default function PlayContestContent() {
                             </Button>
                         </div>
                         <div
-                            className="relative bg-muted/60 hover:bg-muted flex flex-col justify-center items-center gap-4 aspect-[3/4] rounded"
+                            className={cn("relative bg-muted/60 hover:bg-muted flex flex-col justify-center items-center gap-4 aspect-[3/4] rounded",
+                                uploading[theme.id!] ? "opacity-70" : "")}
                         >
+                            {uploading[theme.id!] && <div className="absolute inset-0 flex flex-col justify-center items-center gap-4">
+                                <LoadingComponent text={"Chargement de l'image"}/>
+                            </div>}
                             <input
                                 type="file"
                                 onChange={(e) => handleFileChange(e, theme.id!)}

@@ -70,7 +70,9 @@ export default function Layout({ children,
     }
 
     if(isLoading) {
-        return <LoadingComponent />
+        return <div className="flex flex-col items-center justify-center h-screen space-y-4">
+            <LoadingComponent />
+        </div>
     }
 
     return <>
