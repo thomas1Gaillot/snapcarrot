@@ -15,7 +15,6 @@ export const useUploadPhoto = ({ userId, contestId, setStoredPhotos }: UseUpload
     const [uploading, setUploading] = useState<{ [key: string]: boolean }>({});
 
     const uploadPhoto = async (theme: Theme, file: File) => {
-        console.log("uploadPhoto", theme, file)
         if (!file) {
             alert(`Veuillez sélectionner un fichier pour le thème ${theme.name}`);
             return;
@@ -44,8 +43,9 @@ export const useUploadPhoto = ({ userId, contestId, setStoredPhotos }: UseUpload
                 ACL: "public-read",
             });
             await s3Client.send(command);
+            const unsignedUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/sign/${process.env.NEXT_PUBLIC_SUPABASE_S3_NAME}/${filePath}`;
 
-            // Demande de l'URL signée
+            //Demande de l'URL signée
             const res = await axios.post("/api/photo/signed-url", {
                 path: filePath,
             });
@@ -53,14 +53,14 @@ export const useUploadPhoto = ({ userId, contestId, setStoredPhotos }: UseUpload
             const signedUrl = res.data.signedUrl;
 
             const response = await axios.post("/api/photo/add", {
-                url:signedUrl,
+                url:filePath,
                 themeId: theme.id,
                 contestId: contestId,
                 userId: userId,
             });
 
 
-            const newPhoto: Photo = response.data;
+            const newPhoto: Photo = {url : signedUrl, ...response.data};
 
             setStoredPhotos((prevPhotos) => [...prevPhotos, newPhoto]);
         } catch (error) {

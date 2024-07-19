@@ -23,12 +23,22 @@ export const useStoredPhotos = (selectedThemes: Theme[]) => {
                 selectedThemes.map(async (theme) => {
                     const response = await axios.get(`/api/photo/${user.id}/${id}/${theme.id}/list`);
                     if (response.data) {
-                        return response.data;
+                        const signedUrlRes = await axios.post("/api/photo/signed-url", {
+                                path : response.data.url
+                        })
+                        if(signedUrlRes.data){
+                            const signedUrl = signedUrlRes.data.signedUrl;
+                            return {
+                                ...response.data,
+                                url: signedUrl,
+                            };
+                        }
+
                     }
                     return null;
                 })
             );
-
+            console.log("photosData", photosData)
             const photos = photosData.filter(photo => photo !== null) as Photo[];
             setStoredPhotos(photos);
         } catch (error) {

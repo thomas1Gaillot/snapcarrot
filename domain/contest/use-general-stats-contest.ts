@@ -5,9 +5,9 @@ import {apiClient} from "@/lib/axiosConfig";
 export default function useGeneralStatsContest() {
     const {id} = useContestStore();
 
-    const [numberOfParticipants, setNumberOfParticipants] = useState(0);
-    const [numberOfThemes, setNumberOfThemes] = useState(0);
-    const [numberOfPhotos, setNumberOfPhotos] = useState(0);
+    const [numberOfParticipants, setNumberOfParticipants] = useState('-');
+    const [numberOfThemes, setNumberOfThemes] = useState('-');
+    const [numberOfPhotos, setNumberOfPhotos] = useState('-');
     const [userAdminName, setUserAdminName] = useState('-');
     async function getGeneralStatsContest() {
         try {
