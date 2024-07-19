@@ -56,7 +56,7 @@ export default function PlayContestContent() {
             </div>
             <div className="grid w-full gap-8 py-4">
                 {selectedThemes?.map((theme, index) => (
-                    <div key={index} className={"grid gap-1"}>
+                    <div key={index} className={"grid gap-1 w-full"}>
                         <div className={"flex w-full justify-between"}>
                             <div className={"flex items-center gap-1"}>
                                 {theme.icon.jsx && (

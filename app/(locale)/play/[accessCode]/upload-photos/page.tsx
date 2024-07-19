@@ -1,6 +1,6 @@
 'use client'
 import {TypographyBlockquote, TypographyH4, TypographyMuted, TypographyP} from "@/components/ui/typography";
-import {MedalIcon, MessageCircleHeartIcon, PlayIcon, Share2Icon, ShareIcon, UndoIcon} from "lucide-react";
+import {MedalIcon, MessageCircleHeartIcon, PlayIcon, Share2Icon, UndoIcon} from "lucide-react";
 import useUserStore from "@/domain/user/useUserStore";
 import useContestStore from "@/domain/contest/useContestStore";
 import {useRouter} from "next/navigation";
@@ -8,29 +8,27 @@ import {useEffect} from "react";
 import {Button} from "@/components/ui/button";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import PlayContestContent from "@/app/(locale)/play/[accessCode]/components/PlayContestContent";
-import {CheckIcon} from "@radix-ui/react-icons";
-import {useStoredPhotos} from "@/domain/photo/use-stored-photos";
-import {Theme} from "@/domain/theme/Theme";
 import useCopyToClipboard from "@/hooks/use-copy-to-clipboard";
 import {toast} from "@/components/hooks/use-toast";
+import useGeneralStatsContest from "@/domain/contest/use-general-stats-contest";
 
 export default function UploadPhotosPage() {
     const {user} = useUserStore()
     const router = useRouter()
     const {title, accessCode, description, themes, endDate} = useContestStore()
-    const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
-    const {storedPhotos} = useStoredPhotos(selectedThemes);
     const {copyToClipboard, buttonRef} = useCopyToClipboard()
-
+    const {numberOfParticipants, numberOfThemes, numberOfPhotos} = useGeneralStatsContest()
     useEffect(() => {
         if (!title || !description || !themes || !endDate) {
             router.push('/on-boarding/create-join-contest')
         }
     }, [title, description, themes, endDate]);
+
     function handleCopyToClipboardClick() {
         copyToClipboard(accessCode || '')
-        toast({title : 'Copié !', description : "Le code d'accès a été copié dans votre presse-papier."})
+        toast({title: 'Copié !', description: "Le code d'accès a été copié dans votre presse-papier."})
     }
+
     return (
         <>
             <div className={'flex items-center justify-between gap-4'}>
@@ -50,15 +48,15 @@ export default function UploadPhotosPage() {
             </div>
             <div className={"grid grid-cols-3"}>
                 <div className={"grid gap-1 text-center"}>
-                    <p className={'font-bold'}>3</p>
+                    <p className={'font-bold'}>{numberOfParticipants}</p>
                     <p className={'text-xs'}>participants</p>
                 </div>
                 <div className={"grid gap-1 text-center"}>
-                    <p className={'font-bold'}>4</p>
+                    <p className={'font-bold'}>{numberOfThemes}</p>
                     <p className={'text-xs'}>thèmes</p>
                 </div>
                 <div className={"grid gap-1 text-center"}>
-                    <p className={'font-bold'}>17</p>
+                    <p className={'font-bold'}>{numberOfPhotos}</p>
                     <p className={'text-xs'}>photos publiées</p>
                 </div>
             </div>
@@ -70,11 +68,10 @@ export default function UploadPhotosPage() {
                         <TabsTrigger value="open">
                             <>
                                 <PlayIcon className={'size-6 ml-2'}/>
-                                {themes.length === storedPhotos.length && <CheckIcon className={"size-5"}/>}
                             </>
                         </TabsTrigger>
                         <TabsTrigger value="vote"><MessageCircleHeartIcon className={'size-6 ml-2'}/></TabsTrigger>
-                        <TabsTrigger value="results"><MedalIcon  className={'size-6 ml-2'} /></TabsTrigger>
+                        <TabsTrigger value="results"><MedalIcon className={'size-6 ml-2'}/></TabsTrigger>
                     </TabsList>
                     <TabsContent value="open">
                         <PlayContestContent/>

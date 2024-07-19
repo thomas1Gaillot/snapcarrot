@@ -2,12 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/prisma";
 
 const getContestsByUserId = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { userId } = req.query;
-
-    if (!userId) {
+    const { id } = req.query;
+    if (!id) {
         return res.status(400).json({ error: 'Missing userId' });
     }
-    const userIdNumber = Number(userId);
+    const userIdNumber = Number(id);
     try {
         const contests = await prisma.contest.findMany({
             where: {
@@ -16,7 +15,7 @@ const getContestsByUserId = async (req: NextApiRequest, res: NextApiResponse) =>
         });
 
         if (contests.length === 0) {
-            return res.status(404).json({ message: 'No contests found for the given userId' });
+            return res.status(404).json({ message: 'No list-contests found for the given userId' });
         }
 
         res.status(200).json(contests);
