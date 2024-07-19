@@ -2,7 +2,7 @@ import {cn} from "@/lib/utils";
 
 function TypographyBlockquote({children}: { children: JSX.Element | string }) {
     return (
-        <blockquote className="mt-6 border-l-2 pl-6 italic text-gray-600">
+        <blockquote className="mt-2 border-l-2 pl-6 italic text-sm text-gray-600">
             {children}
         </blockquote>
     )
@@ -61,7 +61,7 @@ function TypographyLead({children}: { children: JSX.Element | string }) {
 
 function TypographyMuted({children}: { children: JSX.Element | string }) {
     return (
-        <p className="text-sm text-gray-500">{children}</p>
+        <p className="text-xs text-gray-500">{children}</p>
     )
 }
 
