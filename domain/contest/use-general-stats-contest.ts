@@ -8,15 +8,16 @@ export default function useGeneralStatsContest() {
     const [numberOfParticipants, setNumberOfParticipants] = useState(0);
     const [numberOfThemes, setNumberOfThemes] = useState(0);
     const [numberOfPhotos, setNumberOfPhotos] = useState(0);
-
+    const [userAdminName, setUserAdminName] = useState('-');
     async function getGeneralStatsContest() {
         try {
             const res = await apiClient.get(`/api/contest/${id}/general-stats`);
-            const {numberOfParticipants, numberOfThemes, numberOfPhotos} = res.data;
+            const {numberOfParticipants, numberOfThemes, numberOfPhotos, userAdminName} = res.data;
 
             setNumberOfParticipants(numberOfParticipants);
             setNumberOfThemes(numberOfThemes);
             setNumberOfPhotos(numberOfPhotos);
+            setUserAdminName(userAdminName)
         } catch (e) {
             console.error(e);
         }
@@ -32,5 +33,6 @@ export default function useGeneralStatsContest() {
         numberOfParticipants,
         numberOfThemes,
         numberOfPhotos,
+        userAdminName,
     };
 }

@@ -1,7 +1,6 @@
 'use client'
 import {TypographyBlockquote, TypographyH4, TypographyMuted, TypographyP} from "@/components/ui/typography";
 import {MedalIcon, MessageCircleHeartIcon, PlayIcon, Share2Icon, UndoIcon} from "lucide-react";
-import useUserStore from "@/domain/user/useUserStore";
 import useContestStore from "@/domain/contest/useContestStore";
 import {useRouter} from "next/navigation";
 import {useEffect} from "react";
@@ -13,11 +12,10 @@ import {toast} from "@/components/hooks/use-toast";
 import useGeneralStatsContest from "@/domain/contest/use-general-stats-contest";
 
 export default function UploadPhotosPage() {
-    const {user} = useUserStore()
     const router = useRouter()
     const {title, accessCode, description, themes, endDate} = useContestStore()
     const {copyToClipboard, buttonRef} = useCopyToClipboard()
-    const {numberOfParticipants, numberOfThemes, numberOfPhotos} = useGeneralStatsContest()
+    const {numberOfParticipants, numberOfThemes, numberOfPhotos, userAdminName} = useGeneralStatsContest()
     useEffect(() => {
         if (!title || !description || !themes || !endDate) {
             router.push('/on-boarding/create-join-contest')
@@ -39,7 +37,7 @@ export default function UploadPhotosPage() {
                 <div className={"flex flex-col w-full"}>
                     <p className={"font-semibold text-sm"}>{title}</p>
                     <TypographyMuted>
-                        <>{`publié par ${user.name}`}</>
+                        <>{`publié par ${userAdminName}`}</>
                     </TypographyMuted>
                 </div>
                 <Button ref={buttonRef} onClick={handleCopyToClipboardClick} variant={'secondary'}>

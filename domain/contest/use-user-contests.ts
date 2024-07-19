@@ -1,16 +1,24 @@
-import useUserStore from "@/domain/user/useUserStore";
 import {useState} from "react";
 import {Contest} from "@/domain/contest/Contest";
+import {apiClient} from "@/lib/axiosConfig";
 
 export default function useUserContests() {
-    const [contests, setContests] = useState<Contest[]>([])
-    async function getMyContests(userId : string) {
-        const response = await fetch(`/api/user/${userId}/list-contests`)
-        if (response.ok) {
-            const contests = await response.json()
-            setContests(contests)
+    const [myContests, setContests] = useState<Contest[]>([])
+    const [userContestsLoading, setUserContestsLoading] = useState<boolean>(false)
+    async function getMyContests(userId: string) {
+        setUserContestsLoading(true)
+        try{
+
+            const response = await apiClient.get(`/api/contest/by-user-id/${userId}/list`)
+            if (response.status === 200) {
+                const contests = await response.data
+                setContests(contests)
+            }
+        } catch (error) {
+            console.error(error)
         }
-        return []
+        setUserContestsLoading(false)
     }
-    return {getMyContests, contests}
+
+    return {getMyContests, myContests, userContestsLoading}
 }

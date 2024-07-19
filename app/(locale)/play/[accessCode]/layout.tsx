@@ -34,7 +34,7 @@ export default function Layout({ children,
     }, [accessCode])
     async function fetchContestFromAccessCode() {
         try {
-            const contest = await axios.get(`/api/contest/find?accessCode=${accessCode}`)
+            const contest = await axios.get(`/api/contest/find-by-access-code?accessCode=${accessCode}`)
             const themes = await axios.get(`/api/theme/${contest.data.id}/list`)
             const contestThemes: Theme[] = themes.data.map((theme: any) => ({
                 id: theme.id,

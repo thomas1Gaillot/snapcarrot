@@ -9,20 +9,21 @@ const getGeneralStatsContest = async (req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const [participantsRes, themesRes, photosRes] = await Promise.all([
+        const [participantsRes, themesRes, photosRes, userAdmin] = await Promise.all([
             apiServer.get(`/api/contest/${contestId}/number-of-participants`),
             apiServer.get(`/api/contest/${contestId}/number-of-themes`),
             apiServer.get(`/api/contest/${contestId}/number-of-photos`),
+            apiServer.get(`/api/user/from-contest/${contestId}`),
         ]);
 
-        if (!participantsRes.data || !themesRes.data || !photosRes.data) {
+        if (!participantsRes.data || !themesRes.data || !photosRes.data || !userAdmin.data) {
             throw new Error('Failed to fetch contest data');
         }
-
         res.status(200).json({
             numberOfParticipants: participantsRes.data.numberOfParticipants,
             numberOfThemes: themesRes.data.numberOfThemes,
             numberOfPhotos: photosRes.data.numberOfPhotos,
+            userAdminName: userAdmin.data.name,
         });
     } catch (error) {
         console.error(error);

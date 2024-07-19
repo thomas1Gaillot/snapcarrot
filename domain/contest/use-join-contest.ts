@@ -17,7 +17,7 @@ export default function useJoinContest() {
     async function findContest(accessCode: string) {
         try {
             setIsLoading(true)
-            const contest = await apiClient.get(`/api/contest/find?accessCode=${accessCode}`)
+            const contest = await apiClient.get(`/api/contest/find-by-access-code?accessCode=${accessCode}`)
 
             const themes = await apiClient.get(`/api/theme/${contest.data.id}/list`)
             const contestThemes:Theme[] = themes.data.map((theme: any) => ({
