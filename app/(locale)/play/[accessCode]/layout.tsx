@@ -17,7 +17,6 @@ export default function Layout({
     children: React.ReactNode;
 }>) {
     const [isLoading, setIsLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('open');
     const params = useParams();
     const accessCode = params ? params.accessCode : null;
     const router = useRouter();
@@ -37,17 +36,6 @@ export default function Layout({
             router.push('/on-boarding/join-contest');
         }
     }, [accessCode]);
-
-    useEffect(() => {
-        const hash = window.location.hash.substring(1); // Remove the # character
-        if (hash) {
-            setActiveTab(hash);
-        }
-    }, []);
-
-    useEffect(() => {
-        window.location.hash = activeTab;
-    }, [activeTab]);
 
     async function fetchContestFromAccessCode() {
         try {
