@@ -42,7 +42,7 @@ export default function useJoinContest() {
                 startDate: contest.data.startDate
             }
             setContest(contestData)
-            router.push(`/play/${contest.data.accessCode}/upload-photos`)
+            router.push(`/play/${contest.data.accessCode}/`)
 
             setIsLoading(false)
         } catch (e: any) {

@@ -51,7 +51,7 @@ export default function CreateJoinContest() {
         <div className={"grid gap-4 py-4"}>
             {adminContests.map(contest =>
                 <Button variant={'ghost'} className={'flex flex-col items-start h-max'} key={contest.id}
-                        onClick={() => router.push(`/play/${contest.accessCode}/upload-photos`)}>
+                        onClick={() => router.push(`/play/${contest.accessCode}`)}>
                     {contest.title}
                     <TypographySmall><>code : {contest.accessCode}</>
                     </TypographySmall>
@@ -74,7 +74,7 @@ export default function CreateJoinContest() {
             <div className={"grid gap-4 py-4"}>
                 {myContests.map(contest =>
                     <Button variant={'ghost'} className={'flex flex-col items-start h-max'} key={contest.id}
-                            onClick={() => router.push(`/play/${contest.accessCode}/upload-photos`)}>
+                            onClick={() => router.push(`/play/${contest.accessCode}`)}>
                         {contest.title}
                         <TypographySmall><>code : {contest.accessCode}</>
                         </TypographySmall>
