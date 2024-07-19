@@ -24,13 +24,13 @@ export const useStoredPhotos = (selectedThemes: Theme[]) => {
                     const response = await axios.get(`/api/photo/${user.id}/${id}/${theme.id}/list`);
                     if (response.data) {
                         const signedUrlRes = await axios.post("/api/photo/signed-url", {
-                                path : response.data.url
+                                path : response.data.path
                         })
                         if(signedUrlRes.data){
                             const signedUrl = signedUrlRes.data.signedUrl;
                             return {
                                 ...response.data,
-                                url: signedUrl,
+                                path: signedUrl,
                             };
                         }
 

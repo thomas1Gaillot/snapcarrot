@@ -53,14 +53,14 @@ export const useUploadPhoto = ({ userId, contestId, setStoredPhotos }: UseUpload
             const signedUrl = res.data.signedUrl;
 
             const response = await axios.post("/api/photo/add", {
-                url:filePath,
+                path:filePath,
                 themeId: theme.id,
                 contestId: contestId,
                 userId: userId,
             });
 
 
-            const newPhoto: Photo = {url : signedUrl, ...response.data};
+            const newPhoto: Photo = {path : signedUrl, ...response.data};
 
             setStoredPhotos((prevPhotos) => [...prevPhotos, newPhoto]);
         } catch (error) {

@@ -49,7 +49,7 @@ model Theme {
 
 model Photo {
   id        Int     @id @default(autoincrement())
-  url       String
+  path      String
   themeId   Int
   userId    Int
   contestId Int

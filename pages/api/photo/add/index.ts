@@ -7,9 +7,9 @@ const postPhoto = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(405).json({ message: 'Method not allowed' });
     }
 
-    const { url, userId, themeId, contestId } = req.body;
+    const { path, userId, themeId, contestId } = req.body;
 
-    if (!url || !userId || !themeId || !contestId) {
+    if (!path || !userId || !themeId || !contestId) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
 
@@ -23,10 +23,10 @@ const postPhoto = async (req: NextApiRequest, res: NextApiResponse) => {
                 },
             },
             update: {
-                url,
+                path,
             },
             create: {
-                url,
+                path,
                 userId: parseInt(userId, 10),
                 themeId: parseInt(themeId, 10),
                 contestId: parseInt(contestId, 10),
