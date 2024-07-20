@@ -74,7 +74,7 @@ export default function StartwithUsernamePage() {
             </Form>
             <div className={"grid gap-2 text-center py-4"}>
                 <Button type={"submit"} onClick={form.handleSubmit(onSubmit)} size={'lg'}
-                        variant={'default'}>Commencer</Button>
+                        variant={'default'}>{user?.id ? 'Bon retour' : 'Commencer'}</Button>
                 <Button variant={"ghost"} onClick={handleRetrieveClick} size={'sm'}
                         >{"J'ai déjà un compte"}</Button>
                 <TypographySmall>Cette application est gratuite. Les photos que vous importez seront supprimés après
