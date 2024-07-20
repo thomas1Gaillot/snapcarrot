@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import { Photo } from "@/domain/photo/Photo";
 import {LucideProps} from "lucide-react";
+import {cn} from "@/lib/utils";
 
 interface CarouselVoteProps {
     themeName: string;
@@ -70,11 +71,11 @@ const CarouselVote: React.FC<CarouselVoteProps> = ({ themeName, themeIcon, photo
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
             </Carousel>
-            <div className="py-2 text-center text-sm text-muted-foreground">
-                Photo {current} sur {photos.length}
+            <div className="flex justify-center items-center w-full gap-1">
+                {Array.from({length: photos.length}, (_, idx) =>
+                    <span key={idx} className={cn("w-[7px] h-[7px] bg-gray-200 rounded-full ", current === (idx+1) && 'w-2 h-2 bg-primary rounded-full')}></span>
+                )}
             </div>
         </div>
     );
