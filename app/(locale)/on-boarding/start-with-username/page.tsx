@@ -11,6 +11,7 @@ import {useRouter} from "next/navigation";
 import Logo from "@/components/[locale]/Logo";
 import {useEffect, useState} from "react";
 import CreateAccountDrawer from "@/app/(locale)/on-boarding/start-with-username/components/create-account-drawer";
+import RetrieveAccountDialog from "@/app/(locale)/on-boarding/start-with-username/components/retrieve-account-dialog";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -21,7 +22,7 @@ const formSchema = z.object({
 export default function StartwithUsernamePage() {
     const {user, setUser} = useUserStore()
     const [openDrawer, setOpenDrawer] = useState(false)
-
+    const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
@@ -44,6 +45,9 @@ export default function StartwithUsernamePage() {
         } else {
             router.push('/on-boarding/create-join-contest')
         }
+    }
+    function handleRetrieveClick() {
+        setOpenDialog(true)
     }
 
     return (<>
@@ -71,11 +75,12 @@ export default function StartwithUsernamePage() {
             <div className={"grid gap-2 text-center py-4"}>
                 <Button type={"submit"} onClick={form.handleSubmit(onSubmit)} size={'lg'}
                         variant={'default'}>Commencer</Button>
-                <Button variant={"ghost"} onClick={form.handleSubmit(onSubmit)} size={'sm'}
+                <Button variant={"ghost"} onClick={handleRetrieveClick} size={'sm'}
                         >{"J'ai déjà un compte"}</Button>
                 <TypographySmall>Cette application est gratuite. Les photos que vous importez seront supprimés après
                     chaque concours.</TypographySmall>
             </div>
+            <RetrieveAccountDialog openDialog={openDialog} setOpenDialog={setOpenDialog}/>
             <CreateAccountDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer}/>
         </>
     );
