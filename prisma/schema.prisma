@@ -14,6 +14,7 @@ model User {
   name    String?
   Contest Contest[]
   Photo   Photo[]
+  votes   Vote[]
 }
 
 model Contest {
@@ -30,6 +31,7 @@ model Contest {
   userId      Int
   user        User      @relation(fields: [userId], references: [id])
   photo       Photo[]
+  votes       Vote[]
 }
 
 enum Status {
@@ -45,6 +47,7 @@ model Theme {
   Contest   Contest? @relation(fields: [contestId], references: [id])
   contestId Int?
   photo     Photo[]
+  Vote      Vote[]
 }
 
 model Photo {
@@ -54,6 +57,21 @@ model Photo {
   userId    Int
   contestId Int
   user      User    @relation(fields: [userId], references: [id])
+  theme     Theme   @relation(fields: [themeId], references: [id])
+  contest   Contest @relation(fields: [contestId], references: [id])
+  votes     Vote[]
+
+  @@unique([userId, themeId, contestId])
+}
+
+model Vote {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  photoId   Int
+  themeId   Int
+  contestId Int
+  user      User    @relation(fields: [userId], references: [id])
+  photo     Photo   @relation(fields: [photoId], references: [id])
   theme     Theme   @relation(fields: [themeId], references: [id])
   contest   Contest @relation(fields: [contestId], references: [id])
 

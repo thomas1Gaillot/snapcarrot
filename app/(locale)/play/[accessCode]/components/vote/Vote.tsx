@@ -17,30 +17,13 @@ import {
 } from "@/components/ui/carousel";
 import {Card, CardContent} from "@/components/ui/card";
 import {Photo} from "@/domain/photo/Photo";
-import CarouselVote from "@/app/(locale)/play/[accessCode]/components/CarousselVote";
+import CarouselVote from "@/app/(locale)/play/[accessCode]/components/vote/CarousselVote";
 
 export default function VotePage() {
     const {themes, id} = useContestStore();
     const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
     const {storedPhotos} = useAllStoredPhotos(id, selectedThemes);
     const {previews} = useAllPhotoPreviews();
-
-    const [api, setApi] = React.useState<CarouselApi>()
-    const [current, setCurrent] = React.useState(0)
-    const [count, setCount] = React.useState(0)
-
-    useEffect(() => {
-        if (!api) {
-            return
-        }
-
-        setCount(api.scrollSnapList().length)
-        setCurrent(api.selectedScrollSnap() + 1)
-
-        api.on("select", () => {
-            setCurrent(api.selectedScrollSnap() + 1)
-        })
-    }, [api])
 
     const getStoredPhotosForTheme = (themeId: string):Photo[] => {
         const themeIndex = selectedThemes.findIndex(theme => theme.id === themeId);

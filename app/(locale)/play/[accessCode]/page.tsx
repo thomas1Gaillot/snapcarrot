@@ -1,9 +1,9 @@
 'use client'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {MedalIcon, MessageCircleHeartIcon, PlayIcon} from "lucide-react";
-import PlayContestContent from "@/app/(locale)/play/[accessCode]/components/PlayContestContent";
-import VotePage from "@/app/(locale)/play/[accessCode]/components/Vote";
-import ResultsPage from "@/app/(locale)/play/[accessCode]/components/Result";
+import PlayContestContent from "@/app/(locale)/play/[accessCode]/components/play/PlayContestContent";
+import VotePage from "@/app/(locale)/play/[accessCode]/components/vote/Vote";
+import ResultsPage from "@/app/(locale)/play/[accessCode]/components/results/Result";
 
 export default function PlayPage() {
     return <div className={"flex flex-col h-full "}>

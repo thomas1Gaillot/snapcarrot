@@ -1,27 +1,21 @@
 import React, {ForwardRefExoticComponent, RefAttributes, useEffect, useState} from "react";
-import {
-    Carousel,
-    CarouselApi,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious
-} from "@/components/ui/carousel";
-import { Photo } from "@/domain/photo/Photo";
-import {LucideProps} from "lucide-react";
+import {Carousel, CarouselApi, CarouselContent, CarouselItem} from "@/components/ui/carousel";
+import {Photo} from "@/domain/photo/Photo";
+import {HeartIcon, LucideProps} from "lucide-react";
 import {cn} from "@/lib/utils";
+import {Button} from "@/components/ui/button";
 
 interface CarouselVoteProps {
     themeName: string;
     themeIcon: {
-        jsx ?: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,
+        jsx?: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,
         name: string
     };
     photos: Photo[];
     previews: { [userId: string]: string | null };
 }
 
-const CarouselVote: React.FC<CarouselVoteProps> = ({ themeName, themeIcon, photos, previews }) => {
+const CarouselVote: React.FC<CarouselVoteProps> = ({themeName, themeIcon, photos, previews}) => {
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
 
@@ -36,6 +30,11 @@ const CarouselVote: React.FC<CarouselVoteProps> = ({ themeName, themeIcon, photo
             setCurrent(api.selectedScrollSnap() + 1);
         });
     }, [api]);
+
+    async function like(currentPhotoIndex: number) {
+
+        console.log(currentPhotoIndex, photos[currentPhotoIndex - 1], themeName)
+    }
 
     return (
         <div className={"grid gap-1 w-full"}>
@@ -63,19 +62,26 @@ const CarouselVote: React.FC<CarouselVoteProps> = ({ themeName, themeIcon, photo
                                 <img
                                     src={previews[photo.userId] || undefined}
                                     alt="Preview"
-                                    className="object-cover w-full h-full rounded" />
+                                    className="object-cover w-full h-full rounded"/>
                             ) : (
                                 <img src={photo.path} alt="Stored Preview"
-                                     className="object-cover w-full h-full rounded" />
+                                     className="object-cover w-full h-full rounded"/>
                             )}
                         </CarouselItem>
                     ))}
                 </CarouselContent>
             </Carousel>
-            <div className="flex justify-center items-center w-full gap-1">
-                {Array.from({length: photos.length}, (_, idx) =>
-                    <span key={idx} className={cn("w-[7px] h-[7px] bg-gray-200 rounded-full ", current === (idx+1) && 'w-2 h-2 bg-primary rounded-full')}></span>
-                )}
+            <div className="flex items-center justify-between w-full ">
+                <Button size={'icon'} variant={'ghost'} onClick={() => like(current)}>
+                    <HeartIcon className={cn("size-7")}/>
+                </Button>
+                <div className={"flex gap-1 items-center"}>
+                    {Array.from({length: photos.length}, (_, idx) =>
+                        <span key={idx}
+                              className={cn("w-[7px] h-[7px] bg-gray-200 rounded-full ", current === (idx + 1) && 'w-2 h-2 bg-primary rounded-full')}></span>
+                    )}
+                </div>
+                <HeartIcon className={"size-7 opacity-0"}/>
             </div>
         </div>
     );
