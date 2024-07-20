@@ -3,6 +3,7 @@ import {TypographyH4, TypographyMuted, TypographyP, TypographySmall} from "@/com
 import useUserStore from "@/domain/user/useUserStore";
 import useContestStore from "@/domain/contest/useContestStore";
 import {CameraIcon} from "lucide-react";
+import {Progress} from "@/components/ui/progress";
 
 export default function ContestCard() {
 
@@ -22,6 +23,7 @@ export default function ContestCard() {
                     <TypographySmall>
                         <>Vous avez particité à 0 des {selectedThemes?.length} photos.</>
                     </TypographySmall>
+
                 </div>
                 <div className="grid w-full gap-8 py-4">
                     {selectedThemes?.map((theme, index) => (

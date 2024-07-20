@@ -11,6 +11,7 @@ import { useUploadPhoto } from "@/domain/photo/use-upload-photo";
 import { Button } from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import LoadingComponent from "@/components/[locale]/loading-component";
+import {Progress} from "@/components/ui/progress";
 
 export default function PlayContestContent() {
     const { themes, id } = useContestStore();
@@ -51,10 +52,13 @@ export default function PlayContestContent() {
             <div className={"grid gap-1"}>
                 <TypographyH4>Phase de publication</TypographyH4>
                 <TypographyP>{'Pour participer, téléchargez une photo par thème !'}</TypographyP>
+                <div className={'grid py-4 gap-1'}>
+                    <TypographySmall>
+                        <>Vous avez participé à {storedPhotos.length} des {selectedThemes?.length} photos.</>
+                    </TypographySmall>
+                    <Progress value={(storedPhotos.length/selectedThemes?.length)*100} />
+                </div>
 
-                <TypographySmall>
-                    <>Vous avez participé à {storedPhotos.length} des {selectedThemes?.length} photos.</>
-                </TypographySmall>
             </div>
             <div className="grid w-full gap-8 py-4">
                 {selectedThemes?.map((theme, index) => (
