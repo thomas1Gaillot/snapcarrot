@@ -11,7 +11,7 @@ export default function useFetchContestFromAccessCode() {
     const [isFetchingContest, setIsFetchingContest] = useState(true);
     const {setContest} = useContestStore();
 
-    async function fetchContestFromAccessCode() {
+    async function fetchContestFromAccessCode(accessCode:string) {
         try {
             const contest = await axios.get(`/api/contest/find-by-access-code?accessCode=${accessCode}`);
             const themes = await axios.get(`/api/theme/${contest.data.id}/list`);

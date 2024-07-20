@@ -40,8 +40,7 @@ export default function VotePage() {
                 {selectedThemes?.map((theme:Theme, index) => (
                     <CarouselVote
                         key={index}
-                        themeName={theme.name}
-                        themeIcon={theme.icon}
+                        theme={theme}
                         photos={getStoredPhotosForTheme(theme.id!)}
                         previews={previews[theme.id!] || {}}
                     />

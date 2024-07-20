@@ -50,6 +50,8 @@ export default function PlayContestContent() {
         <>
             <div className={"grid gap-1"}>
                 <TypographyH4>Phase de publication</TypographyH4>
+                <TypographyP>{'Pour participer, téléchargez une photo par thème !'}</TypographyP>
+
                 <TypographySmall>
                     <>Vous avez participé à {storedPhotos.length} des {selectedThemes?.length} photos.</>
                 </TypographySmall>
