@@ -1,19 +1,16 @@
 export enum Status {
-    open = "ouvert",
-    voting = "votes",
-    results = "terminé",
+    open = "open",
+    voting = "voting",
+    results = "results",
 }
 
 export function getStatus(status: Status) {
-    switch(status) {
-        case 'open':
+    switch (status) {
+        case Status.open:
             return "Ouvert";
-        case 'voting':
-            return "Votes";
-        case 'results':
+        case Status.voting:
+            return "Vote";
+        case Status.results:
             return "Terminé";
-        default:
-            return "Inconnu";
     }
 }
-

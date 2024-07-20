@@ -6,6 +6,7 @@ import {TypographyH1, TypographyP} from "@/components/ui/typography";
 import {useRouter} from "next/navigation";
 import AdminContestsLink from "@/app/(locale)/on-boarding/create-join-contest/components/admin-contests-link";
 import MyContestsLink from "@/app/(locale)/on-boarding/create-join-contest/components/my-contests-link";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 
 export default function CreateJoinContest() {
     const router = useRouter();
@@ -23,8 +24,29 @@ export default function CreateJoinContest() {
             <Button size={'lg'} onClick={() => router.push('/on-boarding/add-contest-title')} variant={'default'}>Créer
                 un concours</Button>
         </div>
-        <AdminContestsLink/>
-        <MyContestsLink/>
+        <Tabs defaultValue={"my-contests"} className="w-full mt-8">
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger
+                    value="my-contests"
+                >
+                    Mes participations
+                </TabsTrigger>
+                <TabsTrigger
+                    value="admin-contests"
+                >
+                    Mes concours
+                </TabsTrigger>
+            </TabsList>
+            <TabsContent value={"my-contests"}>
+                <MyContestsLink/>
+            </TabsContent>
+            <TabsContent value={"admin-contests"}>
+                <AdminContestsLink/>
+            </TabsContent>
+
+        </Tabs>
+
+
     </>
 }
 
