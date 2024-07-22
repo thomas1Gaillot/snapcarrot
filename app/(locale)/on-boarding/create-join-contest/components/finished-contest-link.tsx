@@ -1,7 +1,6 @@
 import {TypographyH4} from "@/components/ui/typography";
 import EmptyContestLink from "@/app/(locale)/on-boarding/create-join-contest/components/empty-contest-link";
 import {UserIcon} from "lucide-react";
-import {Button} from "@/components/ui/button";
 
 const FinishedContestLink = ({}) => {
     const finishedContests = []

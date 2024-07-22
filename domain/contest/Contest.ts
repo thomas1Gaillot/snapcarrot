@@ -30,3 +30,4 @@ export const contestSchema = z.object({
     endDate: z.string().optional(),
 })
 export type ContestSchema = z.infer<typeof contestSchema>
+

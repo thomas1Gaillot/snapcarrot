@@ -11,7 +11,7 @@ const tabsListVariants = cva(
     {
         variants: {
             variant: {
-                default: "h-12",
+                default: "h-16",
                 mobile: "h-16",
             },
         },
