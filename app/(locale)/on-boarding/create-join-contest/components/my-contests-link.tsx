@@ -7,6 +7,7 @@ import {TypographyH4} from "@/components/ui/typography";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import EmptyContestLink from "@/app/(locale)/on-boarding/create-join-contest/components/empty-contest-link";
+import {UserIcon} from "lucide-react";
 
 const MyContestsLink = ({}) => {
     const {user} = useUserStore()
@@ -21,8 +22,11 @@ const MyContestsLink = ({}) => {
 
     return <>
 
-        <div className={"grid grid-cols-[2fr,1fr] py-4"}>
-            <TypographyH4>{"Mes participations"}</TypographyH4>
+        <div className={"grid grid-cols-[40px,3fr,1fr] py-4"}>
+            <div className={'p-1 bg-primary rounded-full w-min h-min text-primary-foreground'}>
+                <UserIcon className={'size-5'}/>
+            </div>
+            <TypographyH4>{"Participations"}</TypographyH4>
             <Button variant={'secondary'} onClick={() => router.push('/on-boarding/join-contest')}>Rejoindre
                 un concours</Button>
         </div>
@@ -43,7 +47,8 @@ const MyContestsLink = ({}) => {
             </div>
         </>
         }
-        {myContests.length === 0 && !userContestsLoading &&  <EmptyContestLink title={'Aucun résultat'} description={"Vous n'avez pas participé à un concours."}/>}
+        {myContests.length === 0 && !userContestsLoading &&
+            <EmptyContestLink title={'Aucun résultat'} description={"Vous n'avez pas participé à un concours."}/>}
 
         <div className={"grid gap-1 py-4"}>
             {myContests.map(contest =>

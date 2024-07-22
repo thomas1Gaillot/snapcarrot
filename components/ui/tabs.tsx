@@ -22,11 +22,11 @@ const tabsListVariants = cva(
 );
 
 const tabsTriggerVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap px-3 py-2  font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center whitespace-nowrap px-3 py-2  ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
     {
         variants: {
             variant: {
-                default: "text-sm data-[state=active]:border-b-2 data-[state=active]:border-foreground data-[state=active]:text-foreground",
+                default: "text-sm font-medium  data-[state=active]:border-b-2 data-[state=active]:border-foreground data-[state=active]:text-foreground",
                 mobile: "text-xs data-[state=active]:border-foreground data-[state=active]:text-primary",
             },
         },
