@@ -14,21 +14,21 @@ export default function PlayPage() {
                     value="open"
                 >
                     <Image alt={'play-image-on'} src={contestIcon(Status.open, true)}
-                           width={64} height={64}
+                           width={48} height={48}
                            className="p-2 rounded flex items-center py-1"/>
                 </TabsTrigger>
                 <TabsTrigger
                     value="vote"
                 >
                     <Image alt={'vote-image'} src={contestIcon(Status.voting, false)}
-                           width={64} height={64}
+                           width={48} height={48}
                            className="p-2 rounded flex items-center py-1"/>
                 </TabsTrigger>
                 <TabsTrigger
                     value="results"
                 >
                     <Image alt={'results-image'} src={contestIcon(Status.results, false)}
-                           width={64} height={64}
+                           width={48} height={48}
                            className="p-2  rounded flex items-center py-1"/>
                 </TabsTrigger>
             </TabsList>

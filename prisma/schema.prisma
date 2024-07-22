@@ -15,6 +15,19 @@ model User {
   Contest Contest[]
   Photo   Photo[]
   votes   Vote[]
+  Result  Result[]
+}
+
+model Result {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  contestId Int
+  points    Int
+  rank      Int
+  user      User    @relation(fields: [userId], references: [id])
+  contest   Contest @relation(fields: [contestId], references: [id])
+
+  @@unique([userId, contestId])
 }
 
 model Contest {
@@ -32,6 +45,7 @@ model Contest {
   user        User      @relation(fields: [userId], references: [id])
   photo       Photo[]
   votes       Vote[]
+  Result      Result[]
 }
 
 enum Status {
