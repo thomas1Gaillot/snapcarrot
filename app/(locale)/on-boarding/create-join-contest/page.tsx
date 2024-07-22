@@ -1,5 +1,5 @@
 'use client'
-import {BookAIcon, MedalIcon, PlayIcon} from "lucide-react";
+import {BookAIcon, HomeIcon, MedalIcon, PlayIcon, PlusCircleIcon} from "lucide-react";
 import AdminContestsLink from "@/app/(locale)/on-boarding/create-join-contest/components/admin-contests-link";
 import MyContestsLink from "@/app/(locale)/on-boarding/create-join-contest/components/my-contests-link";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
@@ -19,31 +19,32 @@ export default function CreateJoinContest() {
                 <FinishedContestLink/>
             </TabsContent>
             <Separator/>
-            <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger
-                    className={"flex flex-col"}
-                    variant={'mobile'}
-                    value="admin-contests"
-                >
-                    <BookAIcon className="size-4"/>
-
-                    Concours créés
-                </TabsTrigger>
+            <TabsList variant={'mobile'} className="grid w-full grid-cols-3">
                 <TabsTrigger
                     variant={'mobile'}
                     value="my-contests"
                     className={"flex flex-col"}
                 >
-                    <PlayIcon className="size-4"/>
-                    Participations
+                    <HomeIcon className="size-5"/>
+                    Accueil
                 </TabsTrigger>
+                <TabsTrigger
+                    className={"flex flex-col"}
+                    variant={'mobile'}
+                    value="admin-contests"
+                >
+                    <PlusCircleIcon className="size-5"/>
+
+                    Concours créés
+                </TabsTrigger>
+
 
                 <TabsTrigger
                     className={"flex flex-col"}
                     variant={'mobile'}
                     value="finished-contests"
                 >
-                    <MedalIcon className="size-4"/>
+                    <MedalIcon className="size-5"/>
                     Terminés
                 </TabsTrigger>
             </TabsList>

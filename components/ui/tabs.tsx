@@ -7,12 +7,12 @@ import {cn} from "@/lib/utils"
 import {cva, VariantProps} from "class-variance-authority";
 
 const tabsListVariants = cva(
-    "inline-flex h-12 items-center justify-center p-1 text-muted-foreground",
+    "inline-flex  items-center justify-center p-1 text-muted-foreground",
     {
         variants: {
             variant: {
-                default: "",
-                mobile: "",
+                default: "h-12",
+                mobile: "h-16",
             },
         },
         defaultVariants: {
@@ -27,7 +27,7 @@ const tabsTriggerVariants = cva(
         variants: {
             variant: {
                 default: "text-sm data-[state=active]:border-b-2 data-[state=active]:border-foreground data-[state=active]:text-foreground",
-                mobile: "text-[8px] data-[state=active]:border-foreground data-[state=active]:text-primary",
+                mobile: "text-xs data-[state=active]:border-foreground data-[state=active]:text-primary",
             },
         },
         defaultVariants: {

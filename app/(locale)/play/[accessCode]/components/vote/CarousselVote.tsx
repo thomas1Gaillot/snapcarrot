@@ -49,7 +49,7 @@ const CarouselVote: React.FC<CarouselVoteProps> = ({theme, photos, previews}) =>
                     {photos.map((photo, idx) => (
                         <CarouselItem key={idx}>
                             <div
-                                className="absolute inset-0 opacity-0 cursor-pointer"
+                                className=" absolute inset-0 opacity-0 cursor-pointer"
                                 key={`${theme.name}-${idx}`}
                             />
                             {previews[photo.userId] ? (
