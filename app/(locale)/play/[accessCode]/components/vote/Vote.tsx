@@ -20,6 +20,7 @@ export default function VotePage() {
     const {user} = useUserStore()
     const {status ,adminUser, id, setContest} = useContestStore()
     const {updateContestStatus} = useUpdateContestStatus()
+
     async function submitVotePhase() {
         const contest = await updateContestStatus(id, Status.voting)
         setContest(contest)
@@ -35,7 +36,7 @@ export default function VotePage() {
                 <VoteContentAvailable/>
             )}
             {status === Status.open && user.id === adminUser.id && (
-                <div className={"grid gap-1"}>
+                <div className={"grid gap-4 mt-4"}>
                     <TypographyP>Clore la phase ouverte et passer à la phase de votes</TypographyP>
                     <Button onClick={submitVotePhase}>Passer à la phase de vote</Button>
                 </div>

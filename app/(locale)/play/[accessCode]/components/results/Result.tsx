@@ -60,7 +60,7 @@ export default function ResultsPage() {
                 <TypographyP>{'Lorsque tout les participants ont voté, vous pourrez découvrir le ou la meilleur(e) photographe !'}</TypographyP>
                 {status === Status.results && <ResultsAvailableContent/>}
                 {status === Status.voting && user.id === adminUser.id && (
-                    <div className={"grid gap-1"}>
+                    <div className={"grid gap-4 mt-4 "}>
                         <TypographyP>Clore la phase de votes et calculer les résultats</TypographyP>
                         <Button onClick={submitCalculateResults}>Clore la phase de vote</Button>
                     </div>

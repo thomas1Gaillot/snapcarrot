@@ -7,7 +7,6 @@ import useContestStore from "@/domain/contest/useContestStore";
 export default function ResultsAvailableContent(){
     const {id} = useContestStore()
 
-
     const [results, setResults] = useState<Result[]>([]);
 
     useEffect(() => {
