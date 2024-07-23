@@ -35,6 +35,7 @@ export default function Layout({
         if(isFetchingContest) return;
         
         if (!title || !description || !themes || !endDate) {
+            console.log('Contest not found', title, description, themes, endDate);
             router.push('/on-boarding/create-join-contest');
         }
     }, [title, description, themes, endDate, isFetchingContest]);

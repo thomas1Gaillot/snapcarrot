@@ -18,12 +18,12 @@ import useUpdateContestStatus from "@/domain/contest/use-update-status";
 
 export default function VotePage() {
     const {user} = useUserStore()
-    const {status ,adminUser, id, setContest} = useContestStore()
+    const {status ,adminUser, id, setContest, themes} = useContestStore()
     const {updateContestStatus} = useUpdateContestStatus()
 
     async function submitVotePhase() {
         const contest = await updateContestStatus(id, Status.voting)
-        setContest(contest)
+        setContest({...contest, themes : themes})
     }
 
     return (

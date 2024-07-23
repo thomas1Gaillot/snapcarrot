@@ -29,7 +29,6 @@ const CarouselVote: React.FC<CarouselVoteProps> = ({theme, photos, previews}) =>
         });
     }, [api]);
 
-    console.log(photos[current - 1], vote)
     return (
         <div className={"grid gap-1 w-full"}>
             <div className={"flex w-full justify-between"}>

@@ -38,7 +38,7 @@ export default function useJoinContest() {
                 winner: contest.data.winner,
                 themes: contestThemes,
                 accessCode: contest.data.accessCode,
-                status: Status.open,
+                status: contest.data.status,
                 startDate: contest.data.startDate,
                 adminUser : contest.data.user
             }

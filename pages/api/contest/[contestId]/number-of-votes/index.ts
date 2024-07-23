@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         if (!voteCount) {
-            return res.status(404).json({ error: 'Vote count not found' });
+            res.status(200).json(0);
         }
 
         res.status(200).json(voteCount);
