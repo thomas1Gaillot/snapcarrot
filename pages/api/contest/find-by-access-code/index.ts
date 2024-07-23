@@ -13,6 +13,9 @@ const getContestByAccessCode = async (req: NextApiRequest, res: NextApiResponse)
             where: {
                 accessCode: accessCode as string,
             },
+            include: {
+                user: true,
+            }
         });
 
         if (!contest) {

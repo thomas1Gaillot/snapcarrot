@@ -6,46 +6,41 @@ import {Theme} from "@/domain/theme/Theme";
 import {useAllStoredPhotos} from "@/domain/photo/use-all-stored-photos";
 import {useAllPhotoPreviews} from "@/domain/photo/use-all-photos-preview";
 import {Photo} from "@/domain/photo/Photo";
-import CarouselVote from "@/app/(locale)/play/[accessCode]/components/vote/CarousselVote";
+import CarouselVote from "@/app/(locale)/play/[accessCode]/components/vote/components/CarousselVote";
 import {Progress} from "@/components/ui/progress";
 import useFetchNumberOfVotes from "@/domain/contest/use-fetch-number-of-votes";
 import useGeneralStatsContest from "@/domain/contest/use-general-stats-contest";
+import VoteContentAvailable from "@/app/(locale)/play/[accessCode]/components/vote/components/vote-content-available";
+import {Status} from "@/domain/status/Status";
+import useUserStore from "@/domain/user/useUserStore";
+import {Button} from "@/components/ui/button";
+import useUpdateContestStatus from "@/domain/contest/use-update-status";
 
 export default function VotePage() {
-    const {themes, id} = useContestStore();
-    const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
-    const {storedPhotos} = useAllStoredPhotos(id, selectedThemes);
-    const {previews} = useAllPhotoPreviews();
-    const {numberOfVotes} = useFetchNumberOfVotes();
-    const {numberOfParticipants} = useGeneralStatsContest()
+    const {user} = useUserStore()
+    const {status ,adminUser, id, setContest} = useContestStore()
+    const {updateContestStatus} = useUpdateContestStatus()
+    async function submitVotePhase() {
+        const contest = await updateContestStatus(id, Status.voting)
+        setContest(contest)
+    }
 
-    const getStoredPhotosForTheme = (themeId: string): Photo[] => {
-        const themeIndex = selectedThemes.findIndex(theme => theme.id === themeId);
-        return storedPhotos[themeIndex] || [];
-    };
-    const numberOfTotalVotes = selectedThemes?.length * Number(numberOfParticipants);
     return (
         <>
             <div className={"grid gap-1"}>
                 <TypographyH4>Phase de vote</TypographyH4>
                 <TypographyP>{'Lorsque tout les participants ont publié leurs photos, chacun peut voter pour la meilleure photo de chaque thème.'}</TypographyP>
             </div>
-            <div className={'grid py-4 gap-1'}>
-                <TypographySmall>
-                    <> {numberOfVotes} votes ont été attribués sur {numberOfTotalVotes}.</>
-                </TypographySmall>
-                <Progress value={(numberOfVotes / numberOfTotalVotes) * 100}/>
-            </div>
-            <div className="grid w-full gap-8 py-4">
-                {selectedThemes?.map((theme: Theme, index) => (
-                    <CarouselVote
-                        key={index}
-                        theme={theme}
-                        photos={getStoredPhotosForTheme(theme.id!)}
-                        previews={previews[theme.id!] || {}}
-                    />
-                ))}
-            </div>
+            {status !== Status.open && (
+                <VoteContentAvailable/>
+            )}
+            {status === Status.open && user.id === adminUser.id && (
+                <div className={"grid gap-1"}>
+                    <TypographyP>Clore la phase ouverte et passer à la phase de votes</TypographyP>
+                    <Button onClick={submitVotePhase}>Passer à la phase de vote</Button>
+                </div>
+            )}
+
         </>
     )
 }

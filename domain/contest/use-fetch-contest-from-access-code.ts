@@ -33,8 +33,9 @@ export default function useFetchContestFromAccessCode() {
                 winner: contest.data.winner,
                 themes: contestThemes,
                 accessCode: contest.data.accessCode,
-                status: Status.open,
-                startDate: contest.data.startDate
+                status: contest.data.status,
+                startDate: contest.data.startDate,
+                adminUser : contest.data.user
             };
             setContest(contestData);
             setIsFetchingContest(false);

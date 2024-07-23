@@ -7,8 +7,7 @@ import {Progress} from "@/components/ui/progress";
 
 export default function ContestCard() {
 
-    const {user} = useUserStore()
-    const {title, description, themes, endDate} = useContestStore()
+    const {title, description, themes, endDate, adminUser} = useContestStore()
     const selectedThemes = themes.filter(theme => theme.selected)
 
     return <Card className={' overflow-y-auto h-full'}>
@@ -16,7 +15,7 @@ export default function ContestCard() {
             <CardHeader className={"flex flex-col "}>
                 <TypographyH4>{title}</TypographyH4>
                 <TypographyMuted>
-                    <>{`publié par ${user.name}`}</>
+                    <>{`publié par ${adminUser.name}`}</>
                 </TypographyMuted>
                 <div className={"grid gap-1"}>
                     <TypographyP>{'Pour chaque thème, chargez une photo qui correspond le mieux au thème.'}</TypographyP>

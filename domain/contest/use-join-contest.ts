@@ -39,7 +39,8 @@ export default function useJoinContest() {
                 themes: contestThemes,
                 accessCode: contest.data.accessCode,
                 status: Status.open,
-                startDate: contest.data.startDate
+                startDate: contest.data.startDate,
+                adminUser : contest.data.user
             }
             setContest(contestData)
             router.push(`/play/${contest.data.accessCode}/`)

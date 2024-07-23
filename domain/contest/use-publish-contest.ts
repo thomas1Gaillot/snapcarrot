@@ -61,7 +61,8 @@ export default function usePublishContest() {
             winner: contestCreated.data.winner,
             status: Status.open,
             startDate: contestCreated.data.startDate,
-            accessCode: contestCreated.data.accessCode
+            accessCode: contestCreated.data.accessCode,
+            adminUser: user
         })
 
         let contestThemes: Theme[] = []

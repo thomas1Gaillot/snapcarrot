@@ -2,6 +2,7 @@ import {create} from "zustand";
 import {defaultThemes, Theme} from "@/domain/theme/Theme";
 import {Contest} from "@/domain/contest/Contest";
 import {Status} from "@/domain/status/Status";
+import {User} from "@/domain/user/User";
 
 interface ContestState {
     id:string;
@@ -13,6 +14,8 @@ interface ContestState {
     startDate:string;
     winner: string;
     status: Status;
+    adminUser: User;
+    setAdminUser: (adminUser: User) => void;
     setStartDate: (startDate: string) => void;
     setWinner: (winner: string) => void;
     setStatus: (status: Status) => void;
@@ -28,6 +31,11 @@ const useContestStore = create<ContestState>((set) => ({
     id: "",
     title: "",
     accessCode: "",
+    adminUser: {
+        email: "",
+        name: "",
+    },
+    setAdminUser: (adminUser: User) => set({adminUser}),
     setAccessCode: (accessCode: string) => set({accessCode}),
     setTitle: (title: string) => set({title}),
     description: "",
@@ -46,6 +54,7 @@ const useContestStore = create<ContestState>((set) => ({
         set({status: contest.status})
         set({accessCode: contest.accessCode})
         set({id: contest.id})
+        set({adminUser: contest.adminUser})
     },
     startDate: "",
     setStartDate: (startDate: string) => set({startDate}),

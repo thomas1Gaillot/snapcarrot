@@ -1,6 +1,7 @@
 import {z} from "zod";
 import {Theme} from "@/domain/theme/Theme";
 import {Status} from "@/domain/status/Status";
+import {User} from "@/domain/user/User";
 
 export interface Contest {
     id: string;
@@ -12,6 +13,7 @@ export interface Contest {
     status: Status;
     startDate: string;
     endDate: string;
+    adminUser : User
 }
 export const contestSchema = z.object({
     title: z.string().min(2, {
