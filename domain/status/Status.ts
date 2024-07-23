@@ -1,7 +1,7 @@
 export enum Status {
     open = "open",
     voting = "voting",
-    results = "results",
+    results = "result",
 }
 
 export function getStatus(status: Status) {

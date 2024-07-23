@@ -27,7 +27,7 @@ export default function PlayPage() {
                            className="p-2 rounded flex items-center py-1"/>
                 </TabsTrigger>
                 <TabsTrigger
-                    value="results"
+                    value="result"
                 >
                     <Image alt={'results-image'} src={contestIcon(Status.results, status === Status.results)}
                            width={48} height={48}
@@ -40,7 +40,7 @@ export default function PlayPage() {
             <TabsContent value={"vote"}>
                 <VotePage/>
             </TabsContent>
-            <TabsContent value={"results"}>
+            <TabsContent value={"result"}>
                 <ResultsPage/>
             </TabsContent>
 

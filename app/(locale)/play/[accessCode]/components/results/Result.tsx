@@ -3,8 +3,14 @@ import {TypographyH4, TypographyP} from "@/components/ui/typography";
 import {Result} from "@/domain/result/Result";
 import WinnerBanner from "./components/WinnerBanner";
 import WinnerTable from "./components/WinnerTable";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import useContestStore from "@/domain/contest/useContestStore";
+import useUserStore from "@/domain/user/useUserStore";
+import {Status} from "@/domain/status/Status";
+import ResultsAvailableContent
+    from "@/app/(locale)/play/[accessCode]/components/results/components/results-available-content";
+import {Button} from "@/components/ui/button";
+import useUpdateContestStatus from "@/domain/contest/use-update-status";
 const fakeResults: Result[] = [{
     id: '1',
     user: {
@@ -38,28 +44,27 @@ const fakeResults: Result[] = [{
 ]
 
 export default function ResultsPage() {
-    const {id} = useContestStore()
-    const [results, setResults] = useState<Result[]>([]);
+    const {id, status, adminUser, setContest} = useContestStore()
+    const {user} = useUserStore()
+    const {updateContestStatus} = useUpdateContestStatus()
 
-    useEffect(() => {
-        async function fetchResults() {
-            const response = await fetch(`/api/result/calculate?contestId=${id}`);
-            const data = await response.json();
-            setResults(data);
-        }
-        if(id){
-            fetchResults();
-        }
-    }, [id]);
-    console.log(results)
 
+    async function submitCalculateResults() {
+        const contest = await updateContestStatus(id, Status.results)
+        setContest(contest)
+    }
     return (
         <>
             <div className={"grid gap-1"}>
                 <TypographyH4>Résultats</TypographyH4>
                 <TypographyP>{'Lorsque tout les participants ont voté, vous pourrez découvrir le ou la meilleur(e) photographe !'}</TypographyP>
-                {results.length >= 0  && <WinnerBanner results={results}/>}
-                {results.length >= 0 && <WinnerTable results={results}/>}
+                {status === Status.results && <ResultsAvailableContent/>}
+                {status === Status.voting && user.id === adminUser.id && (
+                    <div className={"grid gap-1"}>
+                        <TypographyP>Clore la phase de votes et calculer les résultats</TypographyP>
+                        <Button onClick={submitCalculateResults}>Clore la phase de vote</Button>
+                    </div>
+                )}
             </div>
         </>
 
