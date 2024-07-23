@@ -1,9 +1,15 @@
 import {Result} from "@/domain/result/Result";
 import Image from "next/image";
+import {useEffect} from "react";
+import triggerSideCannonConfetti from "@/components/magicui/confetti/triggerConfetti";
 
 const WinnerBanner = ({results}: {
     results: Result[]
 }) => {
+    useEffect(() => {
+        triggerSideCannonConfetti()
+    },[])
+
     return (
         <div className="grid grid-cols-[1fr,2fr,1fr] gap-2 p-4">
             {results.length>= 2 && <div className="flex flex-col w-full items-center justify-end gap-1">
