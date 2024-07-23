@@ -25,7 +25,6 @@ export default function Layout({
 
     useEffect(() => {
         if (accessCode) {
-            console.log("Fetching contest from access code", accessCode)
             fetchContestFromAccessCode(accessCode as string);
         } else {
             router.push('/on-boarding/join-contest');

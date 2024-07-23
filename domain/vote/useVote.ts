@@ -15,7 +15,7 @@ export default function useVote (themeId ?:string) {
     }, [themeId]);
     async function fetchVote(themeId: string) {
         try {
-            const response = await axios.get(`/api/vote/get/${themeId}/${user.id}`);
+            const response = await axios.get(`/api/vote/get/${user.id}/${themeId}`);
             setVote(response.data);
         } catch (error) {
             console.error("Error fetching vote:", error
