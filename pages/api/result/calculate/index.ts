@@ -42,10 +42,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         // Calculate points for each user
         votes.forEach(vote => {
-            if (pointsMap[vote.userId] === undefined) {
-                pointsMap[vote.userId] = 0;
+            if (pointsMap[vote.photo.userId] === undefined) {
+                pointsMap[vote.photo.userId] = 0;
             }
-            pointsMap[vote.userId] += 1; // Adjust the calculation logic as needed
+            pointsMap[vote.photo.userId] += 1; // Adjust the calculation logic as needed
         });
 
         // Transform into an array and sort by points
@@ -58,7 +58,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         for (let i = 0; i < results.length; i++) {
             results[i].rank = i + 1;
         }
-
         // Store the results in the database
         const storedResults = await prisma.$transaction(
             results.map(result => prisma.result.upsert({
