@@ -28,7 +28,7 @@ const AdminContestsLink = ({}) => {
                 <UserIcon className={'size-5'}/>
             </div>
             <TypographyH4>{"Concours créés"}</TypographyH4>
-            <Button onClick={() => router.push('/on-boarding/add-contest-title')} variant={'default'}>Créer
+            <Button className={'ml-2'} size={'sm'} onClick={() => router.push('/on-boarding/add-contest-title')} variant={'default'}>Créer
                 un concours</Button>
         </div>
         <span

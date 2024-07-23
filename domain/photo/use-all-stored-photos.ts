@@ -46,5 +46,5 @@ export const useAllStoredPhotos = (contestId: string, themes: Theme[]) => {
         }
     };
 
-    return { storedPhotos, setStoredPhotos };
+    return { storedPhotos, setStoredPhotos, photosLoading : !loaded };
 };

@@ -6,14 +6,16 @@ import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Theme} from "@/domain/theme/Theme";
 import useVote from "@/domain/vote/useVote";
+import LoadingComponent from "@/components/[locale]/loading-component";
 
 interface CarouselVoteProps {
     theme: Theme;
     photos: Photo[];
+    loading: boolean;
     previews: { [userId: string]: string | null };
 }
 
-const CarouselVote: React.FC<CarouselVoteProps> = ({theme, photos, previews}) => {
+const CarouselVote: React.FC<CarouselVoteProps> = ({theme, loading, photos, previews}) => {
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
     const {vote, like} = useVote(theme.id!);
@@ -45,6 +47,9 @@ const CarouselVote: React.FC<CarouselVoteProps> = ({theme, photos, previews}) =>
                 className={"relative bg-muted/60 hover:bg-muted flex flex-col justify-center items-center gap-4 aspect-[3/4] rounded"}
                 setApi={setApi}>
                 <CarouselContent className={'h-full'}>
+                    {loading && <div className="absolute inset-0 flex flex-col justify-center items-center gap-4">
+                        <LoadingComponent text={"Chargement de l'image"}/>
+                    </div>}
                     {photos.map((photo, idx) => (
                         <CarouselItem key={idx}>
                             <div

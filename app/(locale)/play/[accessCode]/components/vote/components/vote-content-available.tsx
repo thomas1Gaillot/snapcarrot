@@ -13,7 +13,7 @@ import {Photo} from "@/domain/photo/Photo";
 export default function VoteContentAvailable() {
     const {themes, id} = useContestStore();
     const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
-    const {storedPhotos} = useAllStoredPhotos(id, selectedThemes);
+    const {storedPhotos, photosLoading} = useAllStoredPhotos(id, selectedThemes);
     const {previews} = useAllPhotoPreviews();
     const {numberOfVotes} = useFetchNumberOfVotes();
     const {numberOfParticipants} = useGeneralStatsContest()
@@ -36,6 +36,7 @@ export default function VoteContentAvailable() {
             {selectedThemes?.map((theme: Theme, index) => (
                 <CarouselVote
                     key={index}
+                    loading={photosLoading}
                     theme={theme}
                     photos={getStoredPhotosForTheme(theme.id!)}
                     previews={previews[theme.id!] || {}}

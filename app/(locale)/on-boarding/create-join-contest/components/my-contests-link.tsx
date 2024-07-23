@@ -27,7 +27,7 @@ const MyContestsLink = ({}) => {
                 <UserIcon className={'size-5'}/>
             </div>
             <TypographyH4>{"Participations"}</TypographyH4>
-            <Button variant={'secondary'} onClick={() => router.push('/on-boarding/join-contest')}>Rejoindre
+            <Button size={'sm'} className={'ml-2'} variant={'secondary'} onClick={() => router.push('/on-boarding/join-contest')}>Rejoindre
                 un concours</Button>
         </div>
         <span

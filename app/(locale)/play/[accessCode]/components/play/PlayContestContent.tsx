@@ -17,7 +17,7 @@ export default function PlayContestContent() {
     const { themes, id } = useContestStore();
     const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
     const { user } = useUserStore();
-    const { storedPhotos, setStoredPhotos } = useStoredPhotos(selectedThemes);
+    const { storedPhotos, setStoredPhotos, photosLoading } = useStoredPhotos(selectedThemes);
     const { previews, setPreview } = usePhotoPreviews();
     const { uploadPhoto, uploading } = useUploadPhoto({
         userId: user?.id!,
@@ -78,9 +78,9 @@ export default function PlayContestContent() {
                         </div>
                         <div
                             className={cn("relative bg-muted/60 hover:bg-muted flex flex-col justify-center items-center gap-4 aspect-[3/4] rounded",
-                                uploading[theme.id!] ? "opacity-70" : "")}
+                                (photosLoading || uploading[theme.id!]) ? "opacity-70" : "")}
                         >
-                            {uploading[theme.id!] && <div className="absolute inset-0 flex flex-col justify-center items-center gap-4">
+                            {(photosLoading || uploading[theme.id!]) && <div className="absolute inset-0 flex flex-col justify-center items-center gap-4">
                                 <LoadingComponent text={"Chargement de l'image"}/>
                             </div>}
                             <input

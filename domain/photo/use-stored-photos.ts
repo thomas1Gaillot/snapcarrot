@@ -9,7 +9,7 @@ export const useStoredPhotos = (selectedThemes: Theme[]) => {
     const { id } = useContestStore();
     const { user } = useUserStore();
     const [storedPhotos, setStoredPhotos] = useState<Photo[]>([]);
-
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (user && id) {
             fetchStoredPhotos();
@@ -18,6 +18,7 @@ export const useStoredPhotos = (selectedThemes: Theme[]) => {
 
     const fetchStoredPhotos = async () => {
         try {
+            setLoading(true);
             if (!selectedThemes) return;
             const photosData = await Promise.all(
                 selectedThemes.map(async (theme) => {
@@ -38,13 +39,14 @@ export const useStoredPhotos = (selectedThemes: Theme[]) => {
                     return null;
                 })
             );
-            console.log("photosData", photosData)
             const photos = photosData.filter(photo => photo !== null) as Photo[];
             setStoredPhotos(photos);
+            setLoading(false);
         } catch (error) {
             console.error("Error fetching stored photos:", error);
+            setLoading(false);
         }
     };
 
-    return { storedPhotos, setStoredPhotos };
+    return { storedPhotos, setStoredPhotos, photosLoading : loading };
 };
