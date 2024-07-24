@@ -92,10 +92,10 @@ export default function PlayContestContent() {
                             />
                             {previews[theme.id!] ? (
                                 <img src={previews[theme.id!] || undefined} alt="Preview"
-                                     className="object-cover w-full h-full rounded" />
+                                     className="object-contain w-full h-full rounded" />
                             ) : getStoredPhotoForTheme(theme.id!) ? (
                                 <img src={getStoredPhotoForTheme(theme.id!)?.path} alt="Stored Preview"
-                                     className="object-cover w-full h-full rounded" />
+                                     className="object-contain w-full h-full rounded" />
                             ) : (
                                 <CameraIcon className="text-secondary-foreground/50 size-8" />
                             )}
