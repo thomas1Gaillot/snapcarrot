@@ -1,5 +1,5 @@
 import useUserStore from "@/domain/user/useUserStore";
-import {getMyContests} from "@/domain/contest/use-user-contests";
+import {getMyContests} from "@/domain/contest/get-my-contests";
 import {Skeleton} from "@/components/ui/skeleton";
 import ContestLink from "@/app/(locale)/on-boarding/create-join-contest/components/contest-link";
 import {TypographyH4} from "@/components/ui/typography";
@@ -12,7 +12,6 @@ import {Contest} from "@/domain/contest/Contest";
 
 const MyContestsLink = ({}) => {
     const {user} = useUserStore()
-    //const {getMyContests, myContests, userContestsLoading} = useUserContests()
     const router = useRouter();
     const {data: myContests, isLoading, error} = useQuery({
             queryKey: ['my-contests', user.id],
@@ -55,7 +54,7 @@ const MyContestsLink = ({}) => {
             <EmptyContestLink title={'Aucun résultat'} description={"Vous n'avez pas participé à un concours."}/>}
 
         <div className={"grid gap-1 py-4"}>
-            {!isLoading && !error  && myContests.map((contest: Contest) =>
+            {!isLoading && !error && myContests.map((contest: Contest) =>
                 <ContestLink key={contest.id} contest={contest}/>
             )}
         </div>

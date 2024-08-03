@@ -7,7 +7,7 @@ import {cn} from "@/lib/utils"
 import {cva, VariantProps} from "class-variance-authority";
 
 const tabsListVariants = cva(
-    "inline-flex  items-center justify-center p-1 text-muted-foreground",
+    "inline-flex  items-center justify-center p-1 text-muted-foreground/60",
     {
         variants: {
             variant: {
