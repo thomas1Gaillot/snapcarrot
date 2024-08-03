@@ -5,7 +5,7 @@ import useUserStore from "@/domain/user/useUserStore";
 import {Theme} from "@/domain/theme/Theme";
 import {fetchStoredPhotos} from "@/domain/photo/use-stored-photos";
 import {usePhotoPreviews} from "@/domain/photo/use-photo-preview";
-import {uploadPhoto} from "@/domain/photo/use-upload-photo";
+import {uploadPhoto} from "@/domain/photo/upload-photo";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import LoadingComponent from "@/components/[locale]/loading-component";
