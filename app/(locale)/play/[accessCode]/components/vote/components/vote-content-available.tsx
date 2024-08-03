@@ -16,7 +16,7 @@ export default function VoteContentAvailable() {
     const {storedPhotos, photosLoading} = useAllStoredPhotos(id, selectedThemes);
     const {previews} = useAllPhotoPreviews();
     const {numberOfVotes} = useFetchNumberOfVotes();
-    const {numberOfParticipants} = useGeneralStatsContest()
+    const {numberOfParticipants} = useGeneralStatsContest(id)
 
     const getStoredPhotosForTheme = (themeId: string): Photo[] => {
         const themeIndex = selectedThemes.findIndex(theme => theme.id === themeId);

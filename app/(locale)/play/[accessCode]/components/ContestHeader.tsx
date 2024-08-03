@@ -6,17 +6,18 @@ import {toast} from "@/components/hooks/use-toast";
 import {useRouter} from "next/navigation";
 import useContestStore from "@/domain/contest/useContestStore";
 import useCopyToClipboard from "@/hooks/use-copy-to-clipboard";
+import {Contest} from "@/domain/contest/Contest";
 
-export default function ContestHeader() {
-    const {numberOfParticipants, numberOfThemes, numberOfPhotos, userAdminName} = useGeneralStatsContest()
+export default function ContestHeader({contest}:{
+    contest : Contest
+}) {
+    const {numberOfParticipants, numberOfThemes, numberOfPhotos, userAdminName} = useGeneralStatsContest(contest.id)
     const router = useRouter()
-    const {title, accessCode, description, themes, endDate} = useContestStore()
     const {copyToClipboard, buttonRef} = useCopyToClipboard()
-
     function handleCopyToClipboardClick() {
-        copyToClipboard(accessCode || '')
+        copyToClipboard(contest.accessCode || '')
         toast({
-            title: `Code ${accessCode} copié !`,
+            title: `Code ${contest.accessCode} copié !`,
             description: "Le code d'accès a été copié dans votre presse-papier."
         })
     }
@@ -28,7 +29,7 @@ export default function ContestHeader() {
                 <UndoIcon className={"text-gray-800 size-4"}/>
             </Button>
             <div className={"flex flex-col w-full"}>
-                <p className={"font-semibold text-sm"}>{title}</p>
+                <p className={"font-semibold text-sm"}>{contest.title}</p>
                 <TypographyMuted>
                     <>{`publié par ${userAdminName}`}</>
                 </TypographyMuted>
@@ -51,6 +52,6 @@ export default function ContestHeader() {
                 <p className={'text-xs'}>photos publiées</p>
             </div>
         </div>
-        <TypographyBlockquote>{description}</TypographyBlockquote>
+        <TypographyBlockquote>{contest.description}</TypographyBlockquote>
     </>
 }

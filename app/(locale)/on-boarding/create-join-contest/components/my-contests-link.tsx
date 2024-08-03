@@ -9,6 +9,7 @@ import EmptyContestLink from "@/app/(locale)/on-boarding/create-join-contest/com
 import {UserIcon} from "lucide-react";
 import {useQuery} from "@tanstack/react-query";
 import {Contest} from "@/domain/contest/Contest";
+import ErrorInline from "@/components/[locale]/error-inline";
 
 const MyContestsLink = ({}) => {
     const {user} = useUserStore()
@@ -20,7 +21,7 @@ const MyContestsLink = ({}) => {
         }
     )
 
-    if (error) return <pre className={"w-full text-xs text-wrap"}>{JSON.stringify(error)}</pre>
+    if (error) return <ErrorInline error={error}/>
 
     return <>
 

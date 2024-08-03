@@ -1,29 +1,57 @@
-import React, { useRef, useCallback } from "react";
-import { TypographyH4, TypographyP, TypographySmall } from "@/components/ui/typography";
-import { CameraIcon, EditIcon, ImagePlusIcon } from "lucide-react";
-
-import useContestStore from "@/domain/contest/useContestStore";
+import React, {useCallback, useRef} from "react";
+import {TypographyH4, TypographyP, TypographySmall} from "@/components/ui/typography";
+import {CameraIcon, ImagePlusIcon} from "lucide-react";
 import useUserStore from "@/domain/user/useUserStore";
-import { Theme } from "@/domain/theme/Theme";
-import { useStoredPhotos } from "@/domain/photo/use-stored-photos";
-import { usePhotoPreviews } from "@/domain/photo/use-photo-preview";
-import { useUploadPhoto } from "@/domain/photo/use-upload-photo";
-import { Button } from "@/components/ui/button";
+import {Theme} from "@/domain/theme/Theme";
+import {fetchStoredPhotos} from "@/domain/photo/use-stored-photos";
+import {usePhotoPreviews} from "@/domain/photo/use-photo-preview";
+import {uploadPhoto} from "@/domain/photo/use-upload-photo";
+import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import LoadingComponent from "@/components/[locale]/loading-component";
 import {Progress} from "@/components/ui/progress";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {fetchThemes} from "@/domain/contest/fetch-themes";
+import {useParams} from "next/navigation";
 
-export default function PlayContestContent() {
-    const { themes, id } = useContestStore();
-    const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
-    const { user } = useUserStore();
-    const { storedPhotos, setStoredPhotos, photosLoading } = useStoredPhotos(selectedThemes);
-    const { previews, setPreview } = usePhotoPreviews();
-    const { uploadPhoto, uploading } = useUploadPhoto({
-        userId: user?.id!,
-        contestId: id!,
-        setStoredPhotos
+export default function PlayContestContent({id}: { id: string }) {
+    const params = useParams();
+    const accessCode = params ? params.accessCode : null;
+
+    const {data: themes, isLoading: themesLoading, error: themesError} = useQuery({
+        queryKey: ['themes', id],
+        enabled: !!id,
+        queryFn: () => fetchThemes(id),
     });
+    const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
+    const {user} = useUserStore();
+// Use useQuery from TanStack Query v5
+    const {data: storedPhotos = [], isLoading: photosLoading, error: photosError} = useQuery({
+        queryKey: ["storedPhotos", user?.id, id, selectedThemes.map(theme => theme.id)],
+        queryFn:() =>  fetchStoredPhotos(user, id, selectedThemes),
+        enabled: !!user && !!id && selectedThemes.length > 0,
+    });
+    const {previews, setPreview} = usePhotoPreviews();
+    // const {uploadPhoto, uploading} = useUploadPhoto({
+    //     userId: user?.id!,
+    //     contestId: id!,
+    //     setStoredPhotos
+    // });
+    const queryClient = useQueryClient()
+    const uploadPhotoMutation = useMutation({
+        mutationFn: ({theme, file}:{theme : Theme, file : File}) => uploadPhoto({
+            userId: user?.id!,
+            contestId: id!,
+            theme,
+            file
+        }),
+        onSuccess : () =>  {
+            queryClient.invalidateQueries({
+                queryKey : ["contest", accessCode],
+                exact : true
+            })
+        }
+    })
 
     const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -34,7 +62,10 @@ export default function PlayContestContent() {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, themeId: string) => {
         const selectedFile = e.target.files?.[0] || null;
         setPreview(themeId, selectedFile);
-        uploadPhoto(selectedThemes.find(theme => theme?.id === themeId)!, selectedFile!);
+        uploadPhotoMutation.mutate({
+            theme : selectedThemes.find(theme => theme?.id === themeId)!,
+            file : selectedFile!
+        });
     };
 
     const getStoredPhotoForTheme = (themeId: string) => {
@@ -56,7 +87,7 @@ export default function PlayContestContent() {
                     <TypographySmall>
                         <>Vous avez participé à {storedPhotos.length} des {selectedThemes?.length} photos.</>
                     </TypographySmall>
-                    <Progress value={(storedPhotos.length/selectedThemes?.length)*100} />
+                    <Progress value={(storedPhotos.length / selectedThemes?.length) * 100}/>
                 </div>
 
             </div>
@@ -67,22 +98,23 @@ export default function PlayContestContent() {
                             <div className={"flex items-center gap-1"}>
                                 {theme.icon.jsx && (
                                     <div className={"p-1 rounded-full bg-primary/5  border-2 border-primary"}>
-                                        <theme.icon.jsx className={"text-primary size-5"} />
+                                        <theme.icon.jsx className={"text-primary size-5"}/>
                                     </div>
                                 )}
                                 <p className={"text-xs truncate font-medium text-secondary-foreground"}>{theme.name}</p>
                             </div>
                             <Button variant={'ghost'} size={'icon'} onClick={() => handleButtonClick(index)}>
-                                <ImagePlusIcon className={"size-5"} />
+                                <ImagePlusIcon className={"size-5"}/>
                             </Button>
                         </div>
                         <div
                             className={cn("relative bg-muted/60 hover:bg-muted flex flex-col justify-center items-center gap-4 aspect-[3/4] rounded",
-                                (photosLoading || uploading[theme.id!]) ? "opacity-70" : "")}
+                                photosLoading ? "opacity-70" : "")}
                         >
-                            {(photosLoading || uploading[theme.id!]) && <div className="absolute inset-0 flex flex-col justify-center items-center gap-4">
-                                <LoadingComponent text={"Chargement de l'image"}/>
-                            </div>}
+                            {photosLoading &&
+                                <div className="absolute inset-0 flex flex-col justify-center items-center gap-4">
+                                    <LoadingComponent text={"Chargement de l'image"}/>
+                                </div>}
                             <input
                                 type="file"
                                 onChange={(e) => handleFileChange(e, theme.id!)}
@@ -92,12 +124,12 @@ export default function PlayContestContent() {
                             />
                             {previews[theme.id!] ? (
                                 <img src={previews[theme.id!] || undefined} alt="Preview"
-                                     className="object-contain w-full h-full rounded" />
+                                     className="object-contain w-full h-full rounded"/>
                             ) : getStoredPhotoForTheme(theme.id!) ? (
                                 <img src={getStoredPhotoForTheme(theme.id!)?.path} alt="Stored Preview"
-                                     className="object-contain w-full h-full rounded" />
+                                     className="object-contain w-full h-full rounded"/>
                             ) : (
-                                <CameraIcon className="text-secondary-foreground/50 size-8" />
+                                <CameraIcon className="text-secondary-foreground/50 size-8"/>
                             )}
                         </div>
                     </div>

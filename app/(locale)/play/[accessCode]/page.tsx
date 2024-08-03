@@ -5,10 +5,20 @@ import VotePage from "@/app/(locale)/play/[accessCode]/components/vote/Vote";
 import ResultsPage from "@/app/(locale)/play/[accessCode]/components/results/Result";
 import {contestIcon, Status} from "@/domain/status/Status";
 import Image from "next/image";
-import useContestStore from "@/domain/contest/useContestStore";
+import {useQuery} from "@tanstack/react-query";
+import {fetchContest} from "@/domain/contest/fetch-contest";
+import {useParams} from "next/navigation";
 
 export default function PlayPage() {
-    const {status} = useContestStore()
+    const params = useParams();
+    const accessCode = params ? params.accessCode : null;
+
+    const {data: contest, isLoading, error} = useQuery({
+        queryKey: ['contest', accessCode],
+        enabled: !!accessCode,
+        queryFn: () => fetchContest(accessCode as string),
+    })
+    if (isLoading) return <>isLoadingPage ... </>
     return <div className={"flex flex-col h-full "}>
         <Tabs defaultValue={"open"} className="w-full mt-8">
             <TabsList className="grid w-full grid-cols-3 mb-4">
@@ -22,20 +32,20 @@ export default function PlayPage() {
                 <TabsTrigger
                     value="vote"
                 >
-                    <Image alt={'vote-image'} src={contestIcon(Status.voting, status !== Status.open)}
+                    <Image alt={'vote-image'} src={contestIcon(Status.voting, contest?.status !== Status.open)}
                            width={48} height={48}
                            className="p-2 rounded flex items-center py-1"/>
                 </TabsTrigger>
                 <TabsTrigger
                     value="result"
                 >
-                    <Image alt={'results-image'} src={contestIcon(Status.results, status === Status.results)}
+                    <Image alt={'results-image'} src={contestIcon(Status.results, contest?.status === Status.results)}
                            width={48} height={48}
                            className="p-2  rounded flex items-center py-1"/>
                 </TabsTrigger>
             </TabsList>
             <TabsContent value={"open"}>
-                <PlayContestContent/>
+                {contest && <PlayContestContent id={contest.id}/>}
             </TabsContent>
             <TabsContent value={"vote"}>
                 <VotePage/>
