@@ -1,5 +1,5 @@
 'use client'
-import {BookAIcon, HomeIcon, MedalIcon, PlayIcon, PlusCircleIcon} from "lucide-react";
+import {HomeIcon, MedalIcon, PlusCircleIcon} from "lucide-react";
 import AdminContestsLink from "@/app/(locale)/on-boarding/create-join-contest/components/admin-contests-link";
 import MyContestsLink from "@/app/(locale)/on-boarding/create-join-contest/components/my-contests-link";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";

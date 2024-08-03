@@ -1,28 +1,29 @@
 import WinnerBanner from "@/app/(locale)/play/[accessCode]/components/results/components/WinnerBanner";
 import WinnerTable from "@/app/(locale)/play/[accessCode]/components/results/components/WinnerTable";
-import {useEffect, useState} from "react";
 import {Result} from "@/domain/result/Result";
-import useContestStore from "@/domain/contest/useContestStore";
+import {useQuery} from "@tanstack/react-query";
+import {useParams} from "next/navigation";
 
-export default function ResultsAvailableContent(){
-    const {id} = useContestStore()
+export default function ResultsAvailableContent({contestId}: { contestId: string }) {
+    const params = useParams()
+    const accessCode = params ? params.accessCode : null;
 
-    const [results, setResults] = useState<Result[]>([]);
+    const {data: results, isLoading, error} = useQuery({
+        queryKey: ['contest', accessCode, "results"],
+        enabled: !!contestId,
+        queryFn: () => fetchResults(contestId),
+    })
 
-    useEffect(() => {
-        async function fetchResults() {
-            const response = await fetch(`/api/result/calculate?contestId=${id}`);
-            const data = await response.json();
-            setResults(data);
-        }
-        if(id){
-            fetchResults();
-        }
-    }, [id]);
-
+    async function fetchResults(contestId: string) {
+        const response = await fetch(`/api/result/calculate?contestId=${contestId}`);
+        const data: Result[] = await response.json();
+        return data
+    }
+    if(isLoading) return null;
+    if (!results) return <>No results ...</>
 
     return <>
-        {results.length >= 0  && <WinnerBanner results={results}/>}
+        {results.length >= 0 && <WinnerBanner results={results}/>}
         {results.length >= 0 && <WinnerTable results={results}/>}
     </>
 }

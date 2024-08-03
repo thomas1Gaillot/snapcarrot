@@ -22,7 +22,13 @@ const getContestByAccessCode = async (req: NextApiRequest, res: NextApiResponse)
             return res.status(404).json({ message: 'No contest found for the given access code' });
         }
 
-        res.status(200).json(contest);
+        // Rename the `user` field to `adminUser`
+        const response = {
+            ...contest,
+            adminUser: contest.user,
+        };
+
+        res.status(200).json(response);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });

@@ -2,14 +2,15 @@
 import {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
-import {toast} from "@/components/hooks/use-toast";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {z} from "zod";
 import {Button} from "@/components/ui/button";
-import { TypographyH1 } from "@/components/ui/typography";
+import {TypographyH1} from "@/components/ui/typography";
 import {UndoIcon} from "lucide-react";
 import {useRouter} from "next/navigation";
-import useJoinContest from "@/domain/contest/use-join-contest";
+import {useQuery} from "@tanstack/react-query";
+import {fetchContest} from "@/domain/contest/fetch-contest";
+import {useState} from "react";
 
 const FormSchema = z.object({
     accessCode: z.string().min(6, {
@@ -18,22 +19,32 @@ const FormSchema = z.object({
 })
 
 export default function JoinContestPage() {
+    const [isEnabled, setIsEnabled] = useState(false)
     const router = useRouter()
-    const {findContest, fetchThemesIsLoading}=  useJoinContest()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             accessCode: "",
         },
     })
+    const {data, isLoading} = useQuery({
+        queryKey: ["contest", form.getValues().accessCode],
+        enabled: isEnabled,
+        queryFn: () => fetchContest(form.getValues().accessCode).then((contest) => {
+            router.push(`/play/${contest?.accessCode}/`)
+        })
+    })
+
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-       await findContest(data.accessCode)
+        if(data.accessCode.length !== 6) return;
+        setIsEnabled(true)
     }
 
     return <>
-        <Button className={'w-max'} onClick={() => router.push('/on-boarding/create-join-contest')} variant={'secondary'}>
-            <UndoIcon className={"text-gray-800 size-4"} />
+        <Button className={'w-max'} onClick={() => router.push('/on-boarding/create-join-contest')}
+                variant={'secondary'}>
+            <UndoIcon className={"text-gray-800 size-4"}/>
         </Button>
         <TypographyH1>Rejoindre un concours</TypographyH1>
         <Form {...form}>
@@ -68,7 +79,7 @@ export default function JoinContestPage() {
                     )}
                 />
                 <div className={"w-full flex justify-end"}>
-                    <Button loading={fetchThemesIsLoading} type="submit">Rejoindre le concours</Button>
+                    <Button loading={isLoading} type="submit">Rejoindre le concours</Button>
                 </div>
             </form>
         </Form>

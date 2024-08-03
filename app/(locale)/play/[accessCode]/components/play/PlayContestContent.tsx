@@ -3,7 +3,7 @@ import {TypographyH4, TypographyP, TypographySmall} from "@/components/ui/typogr
 import {CameraIcon, ImagePlusIcon} from "lucide-react";
 import useUserStore from "@/domain/user/useUserStore";
 import {Theme} from "@/domain/theme/Theme";
-import {fetchStoredPhotos} from "@/domain/photo/use-stored-photos";
+import {fetchStoredPhotos} from "@/domain/photo/fetch-stored-photos";
 import {usePhotoPreviews} from "@/domain/photo/use-photo-preview";
 import {uploadPhoto} from "@/domain/photo/upload-photo";
 import {Button} from "@/components/ui/button";
@@ -25,18 +25,12 @@ export default function PlayContestContent({id}: { id: string }) {
     });
     const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
     const {user} = useUserStore();
-// Use useQuery from TanStack Query v5
     const {data: storedPhotos = [], isLoading: photosLoading, error: photosError} = useQuery({
         queryKey: ["storedPhotos", user?.id, id, selectedThemes.map(theme => theme.id)],
         queryFn:() =>  fetchStoredPhotos(user, id, selectedThemes),
         enabled: !!user && !!id && selectedThemes.length > 0,
     });
     const {previews, setPreview} = usePhotoPreviews();
-    // const {uploadPhoto, uploading} = useUploadPhoto({
-    //     userId: user?.id!,
-    //     contestId: id!,
-    //     setStoredPhotos
-    // });
     const queryClient = useQueryClient()
     const uploadPhotoMutation = useMutation({
         mutationFn: ({theme, file}:{theme : Theme, file : File}) => uploadPhoto({

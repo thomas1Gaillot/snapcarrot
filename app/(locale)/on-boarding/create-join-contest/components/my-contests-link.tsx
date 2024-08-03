@@ -55,7 +55,7 @@ const MyContestsLink = ({}) => {
             <EmptyContestLink title={'Aucun résultat'} description={"Vous n'avez pas participé à un concours."}/>}
 
         <div className={"grid gap-1 py-4"}>
-            {!isLoading && !error && myContests.map((contest: Contest) =>
+            {!isLoading && !error && myContests?.map((contest: Contest) =>
                 <ContestLink key={contest.id} contest={contest}/>
             )}
         </div>

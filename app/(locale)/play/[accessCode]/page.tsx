@@ -48,10 +48,10 @@ export default function PlayPage() {
                 {contest && <PlayContestContent id={contest.id}/>}
             </TabsContent>
             <TabsContent value={"vote"}>
-                <VotePage/>
+                {contest && <VotePage contest={contest} accessCode={accessCode as string}/>}
             </TabsContent>
             <TabsContent value={"result"}>
-                <ResultsPage/>
+                {contest && <ResultsPage contest={contest} accessCode={accessCode as string}/>}
             </TabsContent>
 
         </Tabs>

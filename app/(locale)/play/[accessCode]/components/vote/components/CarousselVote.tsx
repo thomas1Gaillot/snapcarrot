@@ -70,7 +70,7 @@ const CarouselVote: React.FC<CarouselVoteProps> = ({theme, loading, photos, prev
                 </CarouselContent>
             </Carousel>
             <div className="flex items-center justify-between w-full ">
-                {photos.length > 0 && <Button size={'icon'} variant={'ghost'} onClick={() => like(photos[current - 1])}>
+                {photos?.length > 0 && photos[current - 1] && <Button size={'icon'} variant={'ghost'} onClick={() => like(photos[current - 1])}>
                     <HeartIcon
                         className={cn("size-7", photos[current - 1].id === vote?.id && 'size-9 fill-red-500 text-red-500')}/>
                 </Button>}
