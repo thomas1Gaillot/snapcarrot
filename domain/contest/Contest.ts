@@ -25,7 +25,8 @@ export const contestSchema = z.object({
     themes: z.array(z.object({
         name: z.string(),
         icon: z.string(),
-    })),
+    })).optional(),
+    accessCode: z.string().optional(),
     winner: z.string().optional(),
     status: z.string().optional(),
     startDate: z.string().optional(),

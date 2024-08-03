@@ -1,6 +1,5 @@
 import useUserStore from "@/domain/user/useUserStore";
-import useUserContests from "@/domain/contest/use-user-contests";
-import {useEffect} from "react";
+import {getMyContests} from "@/domain/contest/use-user-contests";
 import {Skeleton} from "@/components/ui/skeleton";
 import ContestLink from "@/app/(locale)/on-boarding/create-join-contest/components/contest-link";
 import {TypographyH4} from "@/components/ui/typography";
@@ -8,17 +7,21 @@ import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import EmptyContestLink from "@/app/(locale)/on-boarding/create-join-contest/components/empty-contest-link";
 import {UserIcon} from "lucide-react";
+import {useQuery} from "@tanstack/react-query";
+import {Contest} from "@/domain/contest/Contest";
 
 const MyContestsLink = ({}) => {
     const {user} = useUserStore()
-    const {getMyContests, myContests, userContestsLoading} = useUserContests()
+    //const {getMyContests, myContests, userContestsLoading} = useUserContests()
     const router = useRouter();
-
-    useEffect(() => {
-        if (user.id) {
-            getMyContests(user.id)
+    const {data: myContests, isLoading, error} = useQuery({
+            queryKey: ['my-contests', user.id],
+            enabled: !!user.id,
+            queryFn: () => getMyContests(user.id),
         }
-    }, [user]);
+    )
+
+    if (error) return <pre className={"w-full text-xs text-wrap"}>{JSON.stringify(error)}</pre>
 
     return <>
 
@@ -27,7 +30,8 @@ const MyContestsLink = ({}) => {
                 <UserIcon className={'size-5'}/>
             </div>
             <TypographyH4>{"Participations"}</TypographyH4>
-            <Button size={'sm'} className={'ml-2'} variant={'secondary'} onClick={() => router.push('/on-boarding/join-contest')}>Rejoindre
+            <Button size={'sm'} className={'ml-2'} variant={'secondary'}
+                    onClick={() => router.push('/on-boarding/join-contest')}>Rejoindre
                 un concours</Button>
         </div>
         <span
@@ -35,7 +39,7 @@ const MyContestsLink = ({}) => {
             {"Cliquez sur l'un des concours pour continuer à jouer."}
         </span>
 
-        {userContestsLoading && <>
+        {isLoading && <>
             <Skeleton className={"w-48 h-6"}/>
             <div className={"grid gap-1 py-4"}>
                 <Skeleton className={"w-32 h-4"}/>
@@ -47,11 +51,11 @@ const MyContestsLink = ({}) => {
             </div>
         </>
         }
-        {myContests.length === 0 && !userContestsLoading &&
+        {myContests?.length === 0 && !isLoading && !error &&
             <EmptyContestLink title={'Aucun résultat'} description={"Vous n'avez pas participé à un concours."}/>}
 
         <div className={"grid gap-1 py-4"}>
-            {myContests.map(contest =>
+            {!isLoading && !error  && myContests.map((contest: Contest) =>
                 <ContestLink key={contest.id} contest={contest}/>
             )}
         </div>

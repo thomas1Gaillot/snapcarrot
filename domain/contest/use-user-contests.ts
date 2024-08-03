@@ -1,14 +1,14 @@
 import {useState} from "react";
-import {Contest} from "@/domain/contest/Contest";
+import {Contest, contestSchema} from "@/domain/contest/Contest";
 import {apiClient} from "@/lib/axiosConfig";
 
 export default function useUserContests() {
     const [myContests, setContests] = useState<Contest[]>([])
     const [userContestsLoading, setUserContestsLoading] = useState<boolean>(false)
+
     async function getMyContests(userId: string) {
         setUserContestsLoading(true)
-        try{
-
+        try {
             const response = await apiClient.get(`/api/contest/by-user-id/${userId}/list`)
             if (response.status === 200) {
                 const contests = await response.data
@@ -21,4 +21,10 @@ export default function useUserContests() {
     }
 
     return {getMyContests, myContests, userContestsLoading}
+}
+
+
+export async function getMyContests(userId?: string) {
+    const response = await apiClient.get(`/api/contest/by-user-id/${userId}/list`)
+    return response.data.map((contest: any) => contestSchema.parse(contest))
 }
