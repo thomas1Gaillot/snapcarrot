@@ -18,7 +18,6 @@ export default function VotePage({contest, accessCode}: { contest: Contest, acce
                 onSuccess: (contestUpdated) => {
                     queryClient.invalidateQueries({
                         queryKey: ["contest", accessCode],
-                        exact: true
                     })
                     // Handle success - update local state or show a success message
                     console.log("Contest status updated successfully:", contestUpdated);

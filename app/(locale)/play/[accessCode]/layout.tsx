@@ -23,7 +23,7 @@ export default function Layout({
         queryFn: () => fetchContest(accessCode as string),
     })
     const {data: themes, isLoading: themesLoading, error: themesError} = useQuery({
-        queryKey: ['themes', contest?.id],
+        queryKey: ['contest', accessCode,  "themes"],
         enabled: !!contest?.id,
         queryFn: () => fetchThemes(contest?.id),
     });

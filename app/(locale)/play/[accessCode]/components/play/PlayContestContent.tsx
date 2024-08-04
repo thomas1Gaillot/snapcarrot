@@ -1,5 +1,5 @@
 import React, {useCallback, useRef} from "react";
-import {TypographyH4, TypographyP, TypographySmall} from "@/components/ui/typography";
+import {TypographyH4, TypographyP} from "@/components/ui/typography";
 import {CameraIcon, ImagePlusIcon} from "lucide-react";
 import useUserStore from "@/domain/user/useUserStore";
 import {Theme} from "@/domain/theme/Theme";
@@ -9,41 +9,41 @@ import {uploadPhoto} from "@/domain/photo/upload-photo";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import LoadingComponent from "@/components/[locale]/loading-component";
-import {Progress} from "@/components/ui/progress";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {fetchThemes} from "@/domain/contest/fetch-themes";
 import {useParams} from "next/navigation";
 import VotesProgress from "@/app/(locale)/play/[accessCode]/components/votes-progress";
 
 export default function PlayContestContent({id}: { id: string }) {
+    const {user} = useUserStore();
+
     const params = useParams();
     const accessCode = params ? params.accessCode : null;
 
-    const {data: themes, isLoading: themesLoading, error: themesError} = useQuery({
-        queryKey: ['themes', id],
+    const {data: themes} = useQuery({
+        queryKey: ['contest', accessCode, "themes"],
         enabled: !!id,
         queryFn: () => fetchThemes(id),
     });
     const selectedThemes: Theme[] = themes?.filter(theme => theme.selected) || [];
-    const {user} = useUserStore();
-    const {data: storedPhotos = [], isLoading: photosLoading, error: photosError} = useQuery({
-        queryKey: ["storedPhotos", user?.id, id, selectedThemes.map(theme => theme.id)],
-        queryFn:() =>  fetchStoredPhotos(user, id, selectedThemes),
+    const {data: storedPhotos = [], isLoading: photosLoading} = useQuery({
+        queryKey:  ['contest', accessCode, "stored-photos", selectedThemes.map(theme => theme.id)],
+        queryFn: () => fetchStoredPhotos(user, id, selectedThemes),
         enabled: !!user && !!id && selectedThemes.length > 0,
     });
     const {previews, setPreview} = usePhotoPreviews();
     const queryClient = useQueryClient()
     const uploadPhotoMutation = useMutation({
-        mutationFn: ({theme, file}:{theme : Theme, file : File}) => uploadPhoto({
+        mutationKey : ["uploadPhotoMutation"],
+        mutationFn: ({theme, file}: { theme: Theme, file: File }) => uploadPhoto({
             userId: user?.id!,
             contestId: id!,
             theme,
             file
         }),
-        onSuccess : () =>  {
+        onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey : ["contest", accessCode],
-                exact : true
+                queryKey: ["contest", accessCode],
             })
         }
     })
@@ -58,8 +58,8 @@ export default function PlayContestContent({id}: { id: string }) {
         const selectedFile = e.target.files?.[0] || null;
         setPreview(themeId, selectedFile);
         uploadPhotoMutation.mutate({
-            theme : selectedThemes.find(theme => theme?.id === themeId)!,
-            file : selectedFile!
+            theme: selectedThemes.find(theme => theme?.id === themeId)!,
+            file: selectedFile!
         });
     };
 
@@ -78,7 +78,8 @@ export default function PlayContestContent({id}: { id: string }) {
             <div className={"grid gap-1"}>
                 <TypographyH4>Phase de publication</TypographyH4>
                 <TypographyP>{'Pour participer, téléchargez une photo par thème !'}</TypographyP>
-                <VotesProgress totalVotes={selectedThemes?.length} numberOfVotes={storedPhotos.length} loading={photosLoading}/>
+                <VotesProgress totalVotes={selectedThemes?.length} numberOfVotes={storedPhotos.length}
+                               loading={photosLoading}/>
             </div>
             <div className="grid w-full gap-8 py-4">
                 {selectedThemes?.map((theme, index) => (
