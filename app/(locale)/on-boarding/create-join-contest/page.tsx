@@ -19,7 +19,7 @@ export default function CreateJoinContest() {
                 <FinishedContestLink/>
             </TabsContent>
             <Separator/>
-            <TabsList variant={'mobile'} className="grid w-full grid-cols-3">
+            <TabsList variant={'mobile'} className="grid w-full grid-cols-2">
                 <TabsTrigger
                     variant={'mobile'}
                     value="my-contests"
@@ -36,16 +36,6 @@ export default function CreateJoinContest() {
                     <PlusCircleIcon className="size-5"/>
 
                     Concours créés
-                </TabsTrigger>
-
-
-                <TabsTrigger
-                    className={"flex flex-col"}
-                    variant={'mobile'}
-                    value="finished-contests"
-                >
-                    <MedalIcon className="size-5"/>
-                    Terminés
                 </TabsTrigger>
             </TabsList>
         </Tabs>

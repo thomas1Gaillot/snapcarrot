@@ -9,14 +9,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-        // Fetch all themes for the given contest including their associated photos
+        // Fetch all themes for the given contest including their associated photos and user details
         const themes = await prisma.theme.findMany({
             where: {
                 contestId: Number(contestId)
             },
             include: {
-                photo: true // Include photos associated with each theme
-            }
+                photo: {
+                    include: {
+                        user: true, // Include user details for each photo
+                    },
+                },
+            },
         });
 
         // Fetch all votes for the contest
@@ -51,7 +55,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             // If there's no top photo, it means no votes were cast
             if (!topPhoto) return null;
 
-            // Return the top photo's details
+            // Return the top photo's details along with user information
             return {
                 theme: {
                     id: theme.id,
@@ -59,7 +63,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     icon: theme.icon
                 },
                 photoId: topPhoto.id,
-                points: photoPointsMap[topPhoto.id] || 0
+                points: photoPointsMap[topPhoto.id] || 0,
+                user: {
+                    id: topPhoto.user.id,
+                    name: topPhoto.user.name || "Unknown"
+                }
             };
         }).filter(Boolean); // Remove any null entries from the results
 
