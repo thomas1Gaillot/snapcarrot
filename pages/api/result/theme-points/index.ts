@@ -9,62 +9,61 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-        // Fetch all photos for the given contest with their themes
-        const photos = await prisma.photo.findMany({
+        // Fetch all themes for the given contest including their associated photos
+        const themes = await prisma.theme.findMany({
             where: {
                 contestId: Number(contestId)
             },
             include: {
-                theme: true
+                photo: true // Include photos associated with each theme
             }
         });
-
-        // Initialize a map to store points by theme and photo
-        const themePointsMap: { [key: number]: { photoId: number, points: number }[] } = {};
 
         // Fetch all votes for the contest
         const votes = await prisma.vote.findMany({
             where: {
                 contestId: Number(contestId)
-            },
-            include: {
-                photo: {
-                    include: {
-                        theme: true
-                    }
-                }
             }
         });
 
-        // Calculate points for each photo and organize by theme
+        // Calculate total points for each photo
+        const photoPointsMap: { [photoId: number]: number } = {};
+
         votes.forEach(vote => {
-            const themeId = vote.photo.theme.id;
             const photoId = vote.photoId;
-
-            if (!themePointsMap[themeId]) {
-                themePointsMap[themeId] = [];
+            if (!photoPointsMap[photoId]) {
+                photoPointsMap[photoId] = 0;
             }
-
-            // Find or create a points record for the photo under its theme
-            let photoPoints = themePointsMap[themeId].find(p => p.photoId === photoId);
-            if (!photoPoints) {
-                photoPoints = { photoId, points: 0 };
-                themePointsMap[themeId].push(photoPoints);
-            }
-            photoPoints.points += 1; // Increment the vote count for the photo
+            photoPointsMap[photoId] += 1; // Increment the vote count for the photo
         });
 
-        // Convert theme points map into an array for response
-        const themeResults = Object.entries(themePointsMap).map(([themeId, photoPoints]) => ({
-            themeId: Number(themeId),
-            themeName: photos.find(p => p.theme.id === Number(themeId))?.theme.name || "Unknown",
-            photos: photoPoints.map(pp => ({
-                photoId: pp.photoId,
-                points: pp.points
-            }))
-        }));
+        // Construct the response based on the theme, and find the photo with the most points
+        const results = themes.map(theme => {
+            // Find the photo with the maximum points within the current theme
+            const topPhoto = theme.photo.reduce((maxPhoto, photo) => {
+                const points = photoPointsMap[photo.id] || 0;
+                if (!maxPhoto || points > (photoPointsMap[maxPhoto.id] || 0)) {
+                    return photo;
+                }
+                return maxPhoto;
+            }, null as typeof theme.photo[0] | null);
 
-        res.status(200).json({ results: themeResults });
+            // If there's no top photo, it means no votes were cast
+            if (!topPhoto) return null;
+
+            // Return the top photo's details
+            return {
+                theme: {
+                    id: theme.id,
+                    name: theme.name,
+                    icon: theme.icon
+                },
+                photoId: topPhoto.id,
+                points: photoPointsMap[topPhoto.id] || 0
+            };
+        }).filter(Boolean); // Remove any null entries from the results
+
+        res.status(200).json(results);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error on theme-points' });
