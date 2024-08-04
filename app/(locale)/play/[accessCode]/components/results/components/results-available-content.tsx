@@ -3,6 +3,8 @@ import WinnerTable from "@/app/(locale)/play/[accessCode]/components/results/com
 import {Result} from "@/domain/result/Result";
 import {useQuery} from "@tanstack/react-query";
 import {useParams} from "next/navigation";
+import {LoaderCircleIcon} from "lucide-react";
+import {Skeleton} from "@/components/ui/skeleton";
 
 export default function ResultsAvailableContent({contestId}: { contestId: string }) {
     const params = useParams()
@@ -19,7 +21,7 @@ export default function ResultsAvailableContent({contestId}: { contestId: string
         const data: Result[] = await response.json();
         return data
     }
-    if(isLoading) return null;
+    if(isLoading) return <Skeleton className="w-full h-[60px] rounded" />;
     if (!results) return <>No results ...</>
 
     return <>

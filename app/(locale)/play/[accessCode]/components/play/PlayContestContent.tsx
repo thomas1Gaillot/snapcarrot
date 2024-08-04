@@ -13,6 +13,7 @@ import {Progress} from "@/components/ui/progress";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {fetchThemes} from "@/domain/contest/fetch-themes";
 import {useParams} from "next/navigation";
+import VotesProgress from "@/app/(locale)/play/[accessCode]/components/votes-progress";
 
 export default function PlayContestContent({id}: { id: string }) {
     const params = useParams();
@@ -77,13 +78,7 @@ export default function PlayContestContent({id}: { id: string }) {
             <div className={"grid gap-1"}>
                 <TypographyH4>Phase de publication</TypographyH4>
                 <TypographyP>{'Pour participer, téléchargez une photo par thème !'}</TypographyP>
-                <div className={'grid py-4 gap-1'}>
-                    <TypographySmall>
-                        <>Vous avez participé à {storedPhotos.length} des {selectedThemes?.length} photos.</>
-                    </TypographySmall>
-                    <Progress value={(storedPhotos.length / selectedThemes?.length) * 100}/>
-                </div>
-
+                <VotesProgress totalVotes={selectedThemes?.length} numberOfVotes={storedPhotos.length} loading={photosLoading}/>
             </div>
             <div className="grid w-full gap-8 py-4">
                 {selectedThemes?.map((theme, index) => (

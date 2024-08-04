@@ -1,17 +1,15 @@
-import {TypographySmall} from "@/components/ui/typography";
-import {Progress} from "@/components/ui/progress";
 import {Theme} from "@/domain/theme/Theme";
 import CarouselVote from "@/app/(locale)/play/[accessCode]/components/vote/components/CarousselVote";
 import React from "react";
 import {fetchAllStoredPhotos} from "@/domain/photo/use-all-stored-photos";
 import {useAllPhotoPreviews} from "@/domain/photo/use-all-photos-preview";
 import {Photo} from "@/domain/photo/Photo";
-import {Contest} from "@/domain/contest/Contest";
 import {useQuery} from "@tanstack/react-query";
 import {apiClient} from "@/lib/axiosConfig";
 import {useParams} from "next/navigation";
 import {fetchContest} from "@/domain/contest/fetch-contest";
 import {fetchThemes} from "@/domain/contest/fetch-themes";
+import VotesProgress from "@/app/(locale)/play/[accessCode]/components/votes-progress";
 
 export default function VoteContentAvailable() {
     const params = useParams()
@@ -31,10 +29,10 @@ export default function VoteContentAvailable() {
 
     const {data: storedPhotos, isLoading: photosLoading, status} = useQuery({
         queryKey: ["contest", accessCode, "all-stored-photos"],
-        enabled: !!contest?.id && selectedThemes.length >0,
-        queryFn: () =>  fetchAllStoredPhotos(selectedThemes, contest?.id)
+        enabled: !!contest?.id && selectedThemes.length > 0,
+        queryFn: () => fetchAllStoredPhotos(selectedThemes, contest?.id)
     })
-    const {data: numberOfVotes} = useQuery({
+    const {data: numberOfVotes, isLoading: numberOfVotesLoading} = useQuery({
         queryKey: ["contest", accessCode, "vote", "number"],
         enabled: !!contest?.id,
         queryFn: async () => {
@@ -61,12 +59,7 @@ export default function VoteContentAvailable() {
     const numberOfTotalVotes = selectedThemes?.length * Number(generalStats?.numberOfParticipants);
 
     return <>
-        <div className={'grid py-4 gap-1'}>
-            <TypographySmall>
-                <> {numberOfVotes} votes ont été attribués sur {numberOfTotalVotes}.</>
-            </TypographySmall>
-            <Progress value={(numberOfVotes / numberOfTotalVotes) * 100}/>
-        </div>
+        <VotesProgress loading={numberOfVotesLoading} numberOfVotes={numberOfVotes} totalVotes={numberOfTotalVotes}/>
         <div className="grid w-full gap-8 py-4">
             {selectedThemes?.map((theme: Theme, index) => (
                 <CarouselVote
